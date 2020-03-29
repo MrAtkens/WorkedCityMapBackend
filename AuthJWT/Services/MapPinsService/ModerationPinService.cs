@@ -11,35 +11,33 @@ namespace AuthJWT.Services.PublicPins
 {
     public class ModerationPinService
     {
-        private readonly PublicPinContext publicPinContext;
-        private readonly ModeratePinContext moderatePinContext;
-        private readonly SolvedPinContext solvedPinContext;
+        private readonly PinsContext publicPinContext;
+        private readonly ModerateContext moderatePinContext;
 
-        public ModerationPinService(PublicPinContext publicPinContext, ModeratePinContext moderatePinContext, SolvedPinContext solvedPinContext)
+        public ModerationPinService(PinsContext publicPinContext, ModerateContext moderatePinContext)
         {
             this.publicPinContext = publicPinContext;
             this.moderatePinContext = moderatePinContext;
-            this.solvedPinContext = solvedPinContext;
         }
 
         public async Task<List<ProblemPin>> GetModerationPins()
         {
-            var moderationPins = await moderatePinContext.ProblemPins.ToListAsync();
+            var moderationPins = await moderatePinContext.ModerateProblemPins.ToListAsync();
             return moderationPins;
         }
 
         public async Task<ProblemPin> GetModerationPinById(Guid id)
         {
-            var foundedPin = await moderatePinContext.ProblemPins.FirstOrDefaultAsync(pins => pins.Id == id);
+            var foundedPin = await moderatePinContext.ModerateProblemPins.FirstOrDefaultAsync(pins => pins.Id == id);
             return foundedPin;
         }
 
-        public async Task<bool> EditModerationPin(Guid oldDataId, ProblemPin newProblemPin)
+        public async Task<bool> EditModerationPin(Guid oldDataId, ProblemPin newModerateProblemPin)
         {
             try
             {
-                var foundedPin = await moderatePinContext.ProblemPins.FirstOrDefaultAsync(pins => pins.Id == oldDataId);
-                foundedPin = newProblemPin;
+                ProblemPin foundedPin = await moderatePinContext.ModerateProblemPins.FirstOrDefaultAsync(pins => pins.Id == oldDataId);
+                moderatePinContext.Entry(foundedPin).CurrentValues.SetValues(newModerateProblemPin);
                 await moderatePinContext.SaveChangesAsync();
                 return true;
             }
@@ -53,8 +51,8 @@ namespace AuthJWT.Services.PublicPins
         {
             try
             {
-                var foundedPin = await moderatePinContext.ProblemPins.FirstOrDefaultAsync(pins => pins.Id == oldDataId);
-                moderatePinContext.ProblemPins.Remove(foundedPin);
+                ProblemPin foundedPin = await moderatePinContext.ModerateProblemPins.FirstOrDefaultAsync(pins => pins.Id == oldDataId);
+                moderatePinContext.ModerateProblemPins.Remove(foundedPin);
                 await moderatePinContext.SaveChangesAsync();
                 return true;
             }
@@ -65,17 +63,17 @@ namespace AuthJWT.Services.PublicPins
         }
 
 
-        public async Task<bool> ModerationAcceptPin(Guid oldDataId)
+        public async Task<bool> ModerationAcceptPin(AcceptDTO acceptDTO)
         {
             try
             {
                 //Remove from Moderation database table
-                var foundedPin = await moderatePinContext.ProblemPins.FirstOrDefaultAsync(pins => pins.Id == oldDataId);
-                moderatePinContext.ProblemPins.Remove(foundedPin);
+                ProblemPin foundedPin = await moderatePinContext.ModerateProblemPins.FirstOrDefaultAsync(pins => pins.Id == acceptDTO.Id);
+                moderatePinContext.ModerateProblemPins.Remove(foundedPin);
                 await moderatePinContext.SaveChangesAsync();
-
                 // Add to Public database table
-                publicPinContext.ProblemPins.Add(foundedPin);
+                foundedPin.ModeratorId = acceptDTO.ModeratorId;
+                await publicPinContext.ProblemPins.AddAsync(foundedPin);
                 await publicPinContext.SaveChangesAsync();
 
                 return true;
@@ -86,21 +84,21 @@ namespace AuthJWT.Services.PublicPins
             }
         }
 
-        public async Task<bool> SolvedProblemPinAccept(Guid oldDataId, SolvedPinDTO solvedPinDTO)
+        public async Task<bool> SolvedProblemPinAccept(SolvedPinDTO solvedPinDTO)
         {
             try
             {
                 //Remove from Moderation database table
-                var foundedPin = await publicPinContext.ProblemPins.FirstOrDefaultAsync(pins => pins.Id == oldDataId);
+                ProblemPin foundedPin = await publicPinContext.ProblemPins.FirstOrDefaultAsync(pins => pins.Id == solvedPinDTO.Id);
                 publicPinContext.ProblemPins.Remove(foundedPin);
-                await publicPinContext.SaveChangesAsync();
-
                 // Add to Solved pins DataBase
                 SolvedPin solvedPin = new SolvedPin()
                 {
+                    Id = foundedPin.Id,
                     UserKeyId = foundedPin.UserKeyId,
                     Name = foundedPin.Name,
                     Description = foundedPin.Description,
+                    ProblemDescription = foundedPin.ProblemDescription,
                     CreationDate = foundedPin.CreationDate,
                     ImagesPath = foundedPin.ImagesPath,
                     BuildingNumber = foundedPin.BuildingNumber,
@@ -110,10 +108,13 @@ namespace AuthJWT.Services.PublicPins
                     Region = foundedPin.Region,
                     SolvedPinImagesPath = solvedPinDTO.SolvedPinImagesPath,
                     Report = solvedPinDTO.Report,
-                    Team = solvedPinDTO.Team
+                    Team = solvedPinDTO.Team,
+                    ModeratorId = foundedPin.ModeratorId,
+                    SolvedModerator = solvedPinDTO.ModeratorId
                 };
-                solvedPinContext.SolvedPins.Add(solvedPin);
-                await solvedPinContext.SaveChangesAsync();
+
+                await publicPinContext.SolvedPins.AddAsync(solvedPin);
+                await publicPinContext.SaveChangesAsync();
 
                 return true;
             }

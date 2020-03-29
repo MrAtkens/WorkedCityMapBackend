@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AuthJWT.DTOs;
 using AuthJWT.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthJWT.Controllers

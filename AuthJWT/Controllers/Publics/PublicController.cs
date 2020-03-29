@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AuthJWT.DTOs;
 using AuthJWT.Models;
 using AuthJWT.Services;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthJWT.Controllers
@@ -31,17 +29,21 @@ namespace AuthJWT.Controllers
             return Ok(new { publicPins });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetPublicMapPinById(Guid Id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPublicMapPinById(Guid id)
         {
-            ProblemPin problemPin = await publicPinServiceCRUD.GetPublicPinById(Id);
-            return Ok(new { problemPin });
+            bool status = true;
+            ProblemPin problemPin = await publicPinServiceCRUD.GetPublicPinById(id);
+            if (problemPin == null) {
+                status = false;
+            }
+            return Ok(new { problemPin, status });
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProblemPin(ProblemPinDTO problemPinDTO)
+        public async Task<IActionResult> CreateProblemPin([FromBody]ProblemPin moderateProblemPin)
         {
-            bool answer = await publicPinServiceCRUD.AddPublicPin(problemPinDTO);
+            bool answer = await publicPinServiceCRUD.AddPublicPin(moderateProblemPin);
             return Ok(new { answer });
         }
 

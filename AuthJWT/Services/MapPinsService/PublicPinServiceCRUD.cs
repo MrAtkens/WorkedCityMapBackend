@@ -3,41 +3,26 @@ using AuthJWT.DTOs;
 using AuthJWT.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace AuthJWT.Services
 {
     public class PublicPinServiceCRUD
     {
-        private readonly PublicPinContext publicPinContext;
-        private readonly ModeratePinContext moderatePinContext;
+        private readonly PinsContext publicPinContext;
+        private readonly ModerateContext moderatePinContext;
 
-        public PublicPinServiceCRUD(PublicPinContext publicPinContext, ModeratePinContext moderatePinContext)
+        public PublicPinServiceCRUD(PinsContext publicPinContext, ModerateContext moderatePinContext)
         {
             this.publicPinContext = publicPinContext;
             this.moderatePinContext = moderatePinContext;
         }
-        public async Task<bool> AddPublicPin(ProblemPinDTO problemPinDTO)
+        public async Task<bool> AddPublicPin(ProblemPin moderateProblemPin)
         {
             try
             {
-                ProblemPin problemPin = new ProblemPin()
-                {
-                    UserKeyId = problemPinDTO.UserKeyId,
-                    Name = problemPinDTO.Name,
-                    Description = problemPinDTO.Description,
-                    ProblemDescription = problemPinDTO.ProblemDescription,
-                    ImagesPath = problemPinDTO.ImagesPath,
-                    Lat = problemPinDTO.Lat,
-                    Lng = problemPinDTO.Lng,
-                    Region = problemPinDTO.Region,
-                    Street = problemPinDTO.Street,
-                    BuildingNumber = problemPinDTO.BuildingNumber,
-                    CreationDate = problemPinDTO.CreationDate
-                };
                 // Add to Moderation database table => transfer to moderation team
-                moderatePinContext.ProblemPins.Add(problemPin);
+                await moderatePinContext.ModerateProblemPins.AddAsync(moderateProblemPin);
                 await moderatePinContext.SaveChangesAsync();
                 return true;
             }
@@ -60,7 +45,7 @@ namespace AuthJWT.Services
             try
             {
                 var foundedPin = await publicPinContext.ProblemPins.FirstOrDefaultAsync(pins => pins.Id == oldDataId);
-                foundedPin = newProblemPin;
+                publicPinContext.Entry(foundedPin).CurrentValues.SetValues(newProblemPin);
                 await publicPinContext.SaveChangesAsync();
                 return true;
             }

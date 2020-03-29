@@ -1,21 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AuthJWT.DataAcces;
-using AuthJWT.Options;
 using AuthJWT.Services;
 using AuthJWT.Services.PublicPins;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 
 namespace AuthJWT
 {
@@ -34,16 +25,15 @@ namespace AuthJWT
         {
             /* services.Configure<SecretOptions>(configuration.GetSection("Secrets"));*/
             services.AddDbContext<UserContext>(options => options.UseSqlServer(configuration.GetConnectionString("MapConnectionString")));
-            services.AddDbContext<ModeratePinContext>(options => options.UseSqlServer(configuration.GetConnectionString("MapConnectionString")));
-            services.AddDbContext<PublicPinContext>(options => options.UseSqlServer(configuration.GetConnectionString("MapConnectionString")));
-            services.AddDbContext<SolvedPinContext>(options => options.UseSqlServer(configuration.GetConnectionString("MapConnectionString")));
+            services.AddDbContext<ModerateContext>(options => options.UseSqlServer(configuration.GetConnectionString("ModerateConnectionString")));
+            services.AddDbContext<PinsContext>(options => options.UseSqlServer(configuration.GetConnectionString("MapConnectionString")));
 
             services.AddTransient<AuthService>();
             services.AddTransient<PublicPinServiceCRUD>();
             services.AddTransient<ModerationPinService>();
-            services.AddTransient<SolvedPinContext>();
+            services.AddTransient<SolvedPinService>();
 
-            services.AddSingleton<PublicPinServiceGet>();
+            services.AddTransient<PublicPinServiceGet>();
 
             services.AddCors(o => o.AddPolicy("FrontPolicy", builder =>
             {

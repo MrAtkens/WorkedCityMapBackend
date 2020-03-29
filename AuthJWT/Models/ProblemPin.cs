@@ -1,21 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AuthJWT.Models
 {
+    [Table("ProblemPins")]
     public class ProblemPin : DefaultPin
     {
         private string HexColor { get; set; } = "#f3423"; // pin color on map 
 
-        [Required, MaxLength(400)]
+        [Required(ErrorMessage = "Вы не вписали данные о проблеме"), MaxLength(400)]
         public string ProblemDescription { get; set; }
-
         public string GetPinColor()
         {
             return HexColor;
         }
+
     }
 }

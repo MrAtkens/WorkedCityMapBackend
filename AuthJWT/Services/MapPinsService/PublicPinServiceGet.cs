@@ -8,9 +8,9 @@ namespace AuthJWT.Services
 {
     public class PublicPinServiceGet
     {
-        private readonly PublicPinContext context;
+        private readonly PinsContext context;
 
-        public PublicPinServiceGet(PublicPinContext context)
+        public PublicPinServiceGet(PinsContext context)
         {
             this.context = context;
         }

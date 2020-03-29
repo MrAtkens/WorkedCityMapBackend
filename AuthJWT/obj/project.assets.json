@@ -8461,11 +8461,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\WEB\\WorkedCityMapsBackend\\BackendCityMaps\\AuthJWT\\AuthJWT.csproj",
+      "projectUniqueName": "G:\\WEB\\WorkedCityMapsBackend\\BackendCityMaps\\WorkedCityMapBackend\\AuthJWT\\AuthJWT.csproj",
       "projectName": "AuthJWT",
-      "projectPath": "G:\\WEB\\WorkedCityMapsBackend\\BackendCityMaps\\AuthJWT\\AuthJWT.csproj",
+      "projectPath": "G:\\WEB\\WorkedCityMapsBackend\\BackendCityMaps\\WorkedCityMapBackend\\AuthJWT\\AuthJWT.csproj",
       "packagesPath": "C:\\Users\\Izana\\.nuget\\packages\\",
-      "outputPath": "G:\\WEB\\WorkedCityMapsBackend\\BackendCityMaps\\AuthJWT\\obj\\",
+      "outputPath": "G:\\WEB\\WorkedCityMapsBackend\\BackendCityMaps\\WorkedCityMapBackend\\AuthJWT\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Izana\\AppData\\Roaming\\NuGet\\NuGet.Config",

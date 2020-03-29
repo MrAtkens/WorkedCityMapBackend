@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AuthJWT.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [EnableCors("FrontPolicy")]
     [ApiController]
     public class SolvedPublicController : ControllerBase
@@ -28,11 +28,16 @@ namespace AuthJWT.Controllers
             return Ok(new { solvedPins });
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetSolvedMapPinById(Guid Id)
         {
+            bool status = true;
             SolvedPin solvedPin = await solvedPinService.GetSolvedPinById(Id);
-            return Ok(new { solvedPin });
+            if (solvedPin == null)
+            {
+                status = false;
+            }
+            return Ok(new { solvedPin, status });
         }
 
     }

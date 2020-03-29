@@ -1,19 +1,17 @@
 ﻿using AuthJWT.DataAcces;
-using AuthJWT.DTOs;
 using AuthJWT.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace AuthJWT.Services.PublicPins
 {
     public class SolvedPinService
     {
-        private readonly SolvedPinContext solvedPinContext;
+        private readonly PinsContext solvedPinContext;
 
-        public SolvedPinService(SolvedPinContext solvedPinContext)
+        public SolvedPinService(PinsContext solvedPinContext)
         {
             this.solvedPinContext = solvedPinContext;
         }
@@ -35,7 +33,7 @@ namespace AuthJWT.Services.PublicPins
             try
             {
                 var foundedPin = await solvedPinContext.SolvedPins.FirstOrDefaultAsync(pins => pins.Id == oldDataId);
-                foundedPin = newSolvedPin;
+                solvedPinContext.Entry(foundedPin).CurrentValues.SetValues(newSolvedPin);
                 await solvedPinContext.SaveChangesAsync();
                 return true;
             }

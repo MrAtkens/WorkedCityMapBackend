@@ -6,14 +6,13 @@ using AuthJWT.Models;
 using AuthJWT.Services.PublicPins;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthJWT.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [EnableCors("ModerationPolicy")]
-    [Authorize]
+    //[Authorize]
     [ApiController]
     public class ModerationController : ControllerBase
     {
@@ -26,41 +25,46 @@ namespace AuthJWT.Controllers
         [HttpGet]
         public async Task<IActionResult> GetModerationPins()
         {
-            List<ProblemPin> moderationPins = await moderationPinService.GetModerationPins();
-            return Ok(new { moderationPins });
+            List<ProblemPin> moderateProblemPins = await moderationPinService.GetModerationPins();
+            return Ok(new { moderateProblemPins });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetModerationPinsById(Guid Id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetModerationPinById(Guid Id)
         {
-            ProblemPin problemPin = await moderationPinService.GetModerationPinById(Id);
-            return Ok(new { problemPin });
+            bool status = true;
+            ProblemPin moderateProblemPin = await moderationPinService.GetModerationPinById(Id);
+            if (moderateProblemPin == null)
+            {
+                status = false;
+            }
+            return Ok(new { moderateProblemPin, status });
         }
 
         [HttpPost]
-        public async Task<IActionResult> AcceptPublicPin(Guid Id)
+        public async Task<IActionResult> AcceptPublicPin([FromBody]AcceptDTO acceptDTO)
         {
-            bool answer = await moderationPinService.ModerationAcceptPin(Id);
+            bool answer = await moderationPinService.ModerationAcceptPin(acceptDTO);
             return Ok(new { answer });
         }
 
         [HttpPost]
-        public async Task<IActionResult> AcceptSolvedPin(Guid Id, SolvedPinDTO solvedPinDTO)
+        public async Task<IActionResult> AcceptSolvedPin([FromBody]SolvedPinDTO solvedPinDTO)
         {
-            bool answer = await moderationPinService.SolvedProblemPinAccept(Id, solvedPinDTO);
+            bool answer = await moderationPinService.SolvedProblemPinAccept(solvedPinDTO);
             return Ok(new { answer });
         }
 
 
-        [HttpPatch]
-        public async Task<IActionResult> EditModerationPin(Guid Id, ProblemPin problemPin)
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> EditModerationPin(Guid Id, ProblemPin moderateProblemPin)
         {
-            bool answer = await moderationPinService.EditModerationPin(Id, problemPin);
+            bool answer = await moderationPinService.EditModerationPin(Id, moderateProblemPin);
             return Ok(new { answer });
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeletePublicPin(Guid Id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteModerationPin(Guid Id)
         {
             bool answer = await moderationPinService.DeleteModerationPin(Id);
             return Ok(new { answer });

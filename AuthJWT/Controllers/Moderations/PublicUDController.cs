@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using AuthJWT.DTOs;
 using AuthJWT.Models;
 using AuthJWT.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthJWT.Controllers
 {
     [Route("api/[controller]/[action]")]
     [EnableCors("ModerationPolicy")]
-    [Authorize]
+    //[Authorize]
     [ApiController]
     public class PublicUDController : ControllerBase
     {
@@ -24,14 +20,14 @@ namespace AuthJWT.Controllers
             this.publicPinServiceCRUD = publicPinServiceCRUD;
         }
 
-       [HttpPatch]
-       public async Task<IActionResult> EditPublicPin(Guid Id, ProblemPin problemPin)
+       [HttpPatch("{id}")]
+       public async Task<IActionResult> EditPublicPin(Guid Id, [FromBody] ProblemPin problemPin)
         {
             bool answer = await publicPinServiceCRUD.EditPublicPin(Id, problemPin);
             return Ok(new { answer });
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePublicPin(Guid Id)
         {
             bool answer = await publicPinServiceCRUD.DeletePublicPin(Id);
