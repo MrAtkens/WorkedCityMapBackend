@@ -7,6 +7,7 @@ using AuthJWT.Services.PublicPins;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace AuthJWT.Controllers
 {
@@ -15,29 +16,49 @@ namespace AuthJWT.Controllers
     [ApiController]
     public class SolvedPublicController : ControllerBase
     {
+        private readonly ILogger<SolvedPublicController> logger;
         private readonly SolvedPinService solvedPinService;
-        public SolvedPublicController(SolvedPinService solvedPinService)
+        public SolvedPublicController(ILogger<SolvedPublicController> logger, SolvedPinService solvedPinService)
         {
+            this.logger = logger;
             this.solvedPinService = solvedPinService;
+
+            logger.LogDebug(1, "NLog injected into SolvedPublicController");
         }
 
         [HttpGet]
         public async Task<IActionResult> GetSolvedMapPins()
         {
-            List<SolvedPin> solvedPins = await solvedPinService.GetSolvedPins();
-            return Ok(new { solvedPins });
+            try
+            {
+                List<SolvedPin> solvedPins = await solvedPinService.GetSolvedPins();
+                return Ok(new { solvedPins, status = true});
+            }
+            catch(Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return StatusCode(500, new { status = false });
+            }
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetSolvedMapPinById(Guid Id)
+        public async Task<IActionResult> GetSolvedMapPinById(Guid id)
         {
-            bool status = true;
-            SolvedPin solvedPin = await solvedPinService.GetSolvedPinById(Id);
-            if (solvedPin == null)
+            try
             {
-                status = false;
+                SolvedPin solvedPin = await solvedPinService.GetSolvedPinById(id);
+                if (solvedPin == null)
+                {
+                    logger.LogInformation($"GetSolvedMapPinById dont found Id: {id}");
+                    return NotFound(new { status = false });
+                }
+                return Ok(new { solvedPin, status = false });
             }
-            return Ok(new { solvedPin, status });
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return StatusCode(500, new { status = false });
+            }
         }
 
     }

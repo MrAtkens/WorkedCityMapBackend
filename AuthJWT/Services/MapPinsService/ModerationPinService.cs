@@ -34,39 +34,23 @@ namespace AuthJWT.Services.PublicPins
 
         public async Task<bool> EditModerationPin(Guid oldDataId, ProblemPin newModerateProblemPin)
         {
-            try
-            {
                 ProblemPin foundedPin = await moderatePinContext.ModerateProblemPins.FirstOrDefaultAsync(pins => pins.Id == oldDataId);
                 moderatePinContext.Entry(foundedPin).CurrentValues.SetValues(newModerateProblemPin);
                 await moderatePinContext.SaveChangesAsync();
                 return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
         }
 
         public async Task<bool> DeleteModerationPin(Guid oldDataId)
         {
-            try
-            {
                 ProblemPin foundedPin = await moderatePinContext.ModerateProblemPins.FirstOrDefaultAsync(pins => pins.Id == oldDataId);
                 moderatePinContext.ModerateProblemPins.Remove(foundedPin);
                 await moderatePinContext.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
+                return true;  
         }
 
 
         public async Task<bool> ModerationAcceptPin(AcceptDTO acceptDTO)
         {
-            try
-            {
                 //Remove from Moderation database table
                 ProblemPin foundedPin = await moderatePinContext.ModerateProblemPins.FirstOrDefaultAsync(pins => pins.Id == acceptDTO.Id);
                 moderatePinContext.ModerateProblemPins.Remove(foundedPin);
@@ -77,17 +61,10 @@ namespace AuthJWT.Services.PublicPins
                 await publicPinContext.SaveChangesAsync();
 
                 return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
         }
 
         public async Task<bool> SolvedProblemPinAccept(SolvedPinDTO solvedPinDTO)
         {
-            try
-            {
                 //Remove from Moderation database table
                 ProblemPin foundedPin = await publicPinContext.ProblemPins.FirstOrDefaultAsync(pins => pins.Id == solvedPinDTO.Id);
                 publicPinContext.ProblemPins.Remove(foundedPin);
@@ -97,10 +74,10 @@ namespace AuthJWT.Services.PublicPins
                     Id = foundedPin.Id,
                     UserKeyId = foundedPin.UserKeyId,
                     Name = foundedPin.Name,
-                    Description = foundedPin.Description,
+                    LocationDescription = foundedPin.LocationDescription,
                     ProblemDescription = foundedPin.ProblemDescription,
                     CreationDate = foundedPin.CreationDate,
-                    ImagesPath = foundedPin.ImagesPath,
+                    Images = foundedPin.Images,
                     BuildingNumber = foundedPin.BuildingNumber,
                     Lat = foundedPin.Lat,
                     Lng = foundedPin.Lng,
@@ -117,11 +94,6 @@ namespace AuthJWT.Services.PublicPins
                 await publicPinContext.SaveChangesAsync();
 
                 return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
         }
 
     }

@@ -30,33 +30,18 @@ namespace AuthJWT.Services.PublicPins
 
         public async Task<bool> EditSolvedPin(Guid oldDataId, SolvedPin newSolvedPin)
         {
-            try
-            {
                 var foundedPin = await solvedPinContext.SolvedPins.FirstOrDefaultAsync(pins => pins.Id == oldDataId);
                 solvedPinContext.Entry(foundedPin).CurrentValues.SetValues(newSolvedPin);
                 await solvedPinContext.SaveChangesAsync();
                 return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
         }
 
         public async Task<bool> DeleteSolvedPin(Guid oldDataId)
         {
-            try
-            {
                 var foundedPin = await solvedPinContext.SolvedPins.FirstOrDefaultAsync(pins => pins.Id == oldDataId);
                 solvedPinContext.SolvedPins.Remove(foundedPin);
                 await solvedPinContext.SaveChangesAsync();
                 return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
         }
-
     }
 }

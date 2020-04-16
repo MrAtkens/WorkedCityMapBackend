@@ -19,17 +19,10 @@ namespace AuthJWT.Services
         }
         public async Task<bool> AddPublicPin(ProblemPin moderateProblemPin)
         {
-            try
-            {
                 // Add to Moderation database table => transfer to moderation team
                 await moderatePinContext.ModerateProblemPins.AddAsync(moderateProblemPin);
                 await moderatePinContext.SaveChangesAsync();
                 return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
         }
 
         //Simple CRUD without Get all because it's another service with Singleton
@@ -42,33 +35,18 @@ namespace AuthJWT.Services
 
         public async Task<bool> EditPublicPin(Guid oldDataId, ProblemPin newProblemPin)
         {
-            try
-            {
                 var foundedPin = await publicPinContext.ProblemPins.FirstOrDefaultAsync(pins => pins.Id == oldDataId);
                 publicPinContext.Entry(foundedPin).CurrentValues.SetValues(newProblemPin);
                 await publicPinContext.SaveChangesAsync();
                 return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
         }
 
         public async Task<bool> DeletePublicPin(Guid oldDataId)
         {
-            try
-            {
                 var foundedPin = await publicPinContext.ProblemPins.FirstOrDefaultAsync(pins => pins.Id == oldDataId);
                 publicPinContext.ProblemPins.Remove(foundedPin);
                 await publicPinContext.SaveChangesAsync();
                 return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
         }
-
     }
 }
