@@ -13,6 +13,8 @@ namespace AuthJWT.Models
 
         public string ProblemDescription { get; set; }
 
+        public ICollection<ImageCustom> Images { get; set; } // pin Images
+
         [NotMapped]
         public List<string> SolvedPinImagesPath { get; set; }
         public DateTime SolveDate { get; } = DateTime.Now;

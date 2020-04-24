@@ -33,7 +33,7 @@ namespace AuthJWT.Controllers
             
             try
             {
-                List<ProblemPin> moderateProblemPins = await moderationPinService.GetModerationPins();
+                 List<ProblemPin> moderateProblemPins = await moderationPinService.GetModerationPins();
                 return Ok(new { moderateProblemPins, status = true });
             }
             catch (Exception ex)

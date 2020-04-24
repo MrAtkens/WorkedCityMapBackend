@@ -6,6 +6,7 @@ using AuthJWT.Models;
 using AuthJWT.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Logging;
 
 namespace AuthJWT.Controllers
@@ -63,11 +64,13 @@ namespace AuthJWT.Controllers
          }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProblemPin([FromBody]ProblemPin moderateProblemPin)
+        public async Task<IActionResult> CreateProblemPin([FromForm]ProblemPinDTO problemPinDTO)
         {
             try
             {
-                bool answer = await publicPinServiceCRUD.AddPublicPin(moderateProblemPin);
+
+                string ip = Request.HttpContext.Connection.RemoteIpAddress.ToString();
+                bool answer = await publicPinServiceCRUD.AddPublicPin(problemPinDTO, ip);
                 return Ok(new { answer });
             }
             catch (Exception ex)

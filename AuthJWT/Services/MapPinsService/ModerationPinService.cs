@@ -22,7 +22,7 @@ namespace AuthJWT.Services.PublicPins
 
         public async Task<List<ProblemPin>> GetModerationPins()
         {
-            var moderationPins = await moderatePinContext.ModerateProblemPins.ToListAsync();
+            var moderationPins = await moderatePinContext.ModerateProblemPins.Include(problemPin => problemPin.Images).ToListAsync();
             return moderationPins;
         }
 

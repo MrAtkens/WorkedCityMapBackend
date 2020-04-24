@@ -8,13 +8,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using System.IO;
 
 namespace AuthJWT
 {
     public class Startup
     {
-        readonly string AllowSpecificOrigins = "_myAllowSpecificOrigins";
+        readonly string AllowSpecificOrigins = "d1384668-f50e-478b-a59d-198c39a9a2dd";
 
         private readonly IConfiguration configuration;
         public Startup(IConfiguration configuration)
@@ -55,8 +56,11 @@ namespace AuthJWT
                                    .AllowCredentials();
             }));
 
-            services.AddControllers();
+            services.AddDirectoryBrowser();
 
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
             /*var secrets = configuration.GetSection("Secrets");
             var key = Encoding.ASCII.GetBytes(secrets.GetValue<string>("JWTSecret"));
             services.AddAuthentication(x =>
@@ -82,12 +86,11 @@ namespace AuthJWT
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
-            app.UseStaticFiles(new StaticFileOptions
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions
             {
                 FileProvider = new PhysicalFileProvider(
-                Path.Combine(Directory.GetCurrentDirectory(), "Images")),
-                RequestPath = "/Images"
+                Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "PinPublicImages")),
+                RequestPath = "/Uploads"
             });
 
 
@@ -95,7 +98,12 @@ namespace AuthJWT
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
 
+            app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors("FrontPolicy");
             app.UseCors("ModerationPolicy");

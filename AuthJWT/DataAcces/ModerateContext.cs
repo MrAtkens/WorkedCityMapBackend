@@ -9,26 +9,11 @@ namespace AuthJWT.DataAcces
     {
         public ModerateContext(DbContextOptions<ModerateContext> options) : base(options)
         {
-            //Database.EnsureCreated();
+            Database.EnsureCreated();
             //Database.Migrate();
         }
 
         public DbSet<ProblemPin> ModerateProblemPins { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<ProblemPin>().HasData(new ProblemPin
-            {
-                Name = "kalgf",
-                LocationDescription = "gsdofkgsodfg",
-                ProblemDescription = "dfgksdfgsdfg",
-                Lat = 51.5346345,
-                Lng = 71.342354,
-                Street = "Abay",
-                Region = "Karagandy",
-                UserKeyId = Guid.NewGuid(),
-                Images = new List<Image>()
-            });;
-        }
     }
 }
