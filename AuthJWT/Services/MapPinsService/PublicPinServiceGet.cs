@@ -16,7 +16,7 @@ namespace AuthJWT.Services
         }
         public async Task<List<ProblemPin>> GetPublicPins()
         {
-            var publicPins = await context.ProblemPins.ToListAsync();
+            var publicPins = await context.ProblemPins.Include(problemPin => problemPin.Images).ToListAsync();
             return publicPins;      
         }
     }

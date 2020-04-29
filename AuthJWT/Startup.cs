@@ -86,12 +86,13 @@ namespace AuthJWT
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseDirectoryBrowser(new DirectoryBrowserOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "PinPublicImages")),
-                RequestPath = "/Uploads"
-            });
+            app.UseFileServer(enableDirectoryBrowsing: false);
+            /*  app.UseDirectoryBrowser(new DirectoryBrowserOptions
+              {
+                  FileProvider = new PhysicalFileProvider(
+                  Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+                  RequestPath = "/Uploads"
+              });*/
 
 
             if (env.IsDevelopment())

@@ -397,7 +397,7 @@
           "lib/netstandard2.0/Newtonsoft.Json.Bson.dll": {}
         }
       },
-      "NLog/4.6.7": {
+      "NLog/4.7.0": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/NLog.dll": {}
@@ -406,11 +406,11 @@
           "lib/netstandard2.0/NLog.dll": {}
         }
       },
-      "NLog.Extensions.Logging/1.6.0": {
+      "NLog.Extensions.Logging/1.6.2": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Logging": "3.0.0",
-          "NLog": "[4.6.7, 5.0.0-beta01)"
+          "NLog": "[4.6.8, 5.0.0-beta01)"
         },
         "compile": {
           "lib/netcoreapp3.0/NLog.Extensions.Logging.dll": {}
@@ -419,10 +419,10 @@
           "lib/netcoreapp3.0/NLog.Extensions.Logging.dll": {}
         }
       },
-      "NLog.Web.AspNetCore/4.9.0": {
+      "NLog.Web.AspNetCore/4.9.2": {
         "type": "package",
         "dependencies": {
-          "NLog.Extensions.Logging": "1.6.0"
+          "NLog.Extensions.Logging": "1.6.2"
         },
         "compile": {
           "lib/netcoreapp3.0/NLog.Web.AspNetCore.dll": {}
@@ -2067,10 +2067,10 @@
         "newtonsoft.json.bson.nuspec"
       ]
     },
-    "NLog/4.6.7": {
-      "sha512": "xSIzXrIF89Ww6yoJPvyBcu4JLgNiDiEaTT4GyVltZEeVIvkgSm9J/srUy1Yz0EXwbTv502l8knoCFrgNc/MUMA==",
+    "NLog/4.7.0": {
+      "sha512": "ch4piF/ifV6ZapFx5Vj8MGaiCZkztHwTMFghJJSOkA/LeWcNdvqW8VzRw7ZMvS8anUmsH81FV334Vay6+ja4Kg==",
       "type": "package",
-      "path": "nlog/4.6.7",
+      "path": "nlog/4.7.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2096,14 +2096,14 @@
         "lib/wp8/NLog.xml",
         "lib/xamarinios10/NLog.dll",
         "lib/xamarinios10/NLog.xml",
-        "nlog.4.6.7.nupkg.sha512",
+        "nlog.4.7.0.nupkg.sha512",
         "nlog.nuspec"
       ]
     },
-    "NLog.Extensions.Logging/1.6.0": {
-      "sha512": "T4EoyIMeVG0hMRzbzAOALtTvzshsDkdlxcgpQ0h/MDNppe/VwG39/M4LwisR8ViLPJmakLO0y7ey/IrK46FMFA==",
+    "NLog.Extensions.Logging/1.6.2": {
+      "sha512": "HKHxPdCly6n3Ln0i+H/po5Og9XyNAizMpM9TLikk6vWgtVSNlES9hMRgiuvzFMK1ssOU8zmrYNsr4s7w+IgiSg==",
       "type": "package",
-      "path": "nlog.extensions.logging/1.6.0",
+      "path": "nlog.extensions.logging/1.6.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2119,14 +2119,14 @@
         "lib/netstandard1.5/NLog.Extensions.Logging.xml",
         "lib/netstandard2.0/NLog.Extensions.Logging.dll",
         "lib/netstandard2.0/NLog.Extensions.Logging.xml",
-        "nlog.extensions.logging.1.6.0.nupkg.sha512",
+        "nlog.extensions.logging.1.6.2.nupkg.sha512",
         "nlog.extensions.logging.nuspec"
       ]
     },
-    "NLog.Web.AspNetCore/4.9.0": {
-      "sha512": "lEA+6Xm/DbU+Z6qVbJP1fgP4MvE0amlwXlJj3MyarcassZ/yuIAQIJsiLoJ/NMDFu1Jfh139L8F4mQpB/r5q/g==",
+    "NLog.Web.AspNetCore/4.9.2": {
+      "sha512": "C12FzK0z67Y6FC+NDckeZzJmJZmnM+fKCmKbe7at2XBj1O58PPhOZYnKC8Ryw4u+3cyHiMBVlZYwRhWJXs6RFg==",
       "type": "package",
-      "path": "nlog.web.aspnetcore/4.9.0",
+      "path": "nlog.web.aspnetcore/4.9.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2140,7 +2140,7 @@
         "lib/netstandard1.5/NLog.Web.AspNetCore.xml",
         "lib/netstandard2.0/NLog.Web.AspNetCore.dll",
         "lib/netstandard2.0/NLog.Web.AspNetCore.xml",
-        "nlog.web.aspnetcore.4.9.0.nupkg.sha512",
+        "nlog.web.aspnetcore.4.9.2.nupkg.sha512",
         "nlog.web.aspnetcore.nuspec"
       ]
     },
@@ -5387,8 +5387,8 @@
       "Microsoft.AspNetCore.Mvc.NewtonsoftJson >= 3.1.3",
       "Microsoft.EntityFrameworkCore >= 3.1.3",
       "Microsoft.EntityFrameworkCore.SqlServer >= 3.1.3",
-      "NLog >= 4.6.7",
-      "NLog.Web.AspNetCore >= 4.9.0",
+      "NLog >= 4.7.0",
+      "NLog.Web.AspNetCore >= 4.9.2",
       "RestSharp >= 106.6.10",
       "System.IdentityModel.Tokens.Jwt >= 6.5.0"
     ]
@@ -5444,11 +5444,11 @@
           },
           "NLog": {
             "target": "Package",
-            "version": "[4.6.7, )"
+            "version": "[4.7.0, )"
           },
           "NLog.Web.AspNetCore": {
             "target": "Package",
-            "version": "[4.9.0, )"
+            "version": "[4.9.2, )"
           },
           "RestSharp": {
             "target": "Package",
