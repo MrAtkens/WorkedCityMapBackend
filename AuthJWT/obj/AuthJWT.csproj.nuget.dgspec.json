@@ -10,11 +10,11 @@
         "projectUniqueName": "G:\\WEB\\WorkedCityMapsBackend\\BackendCityMaps\\WorkedCityMapBackend\\AuthJWT\\AuthJWT.csproj",
         "projectName": "AuthJWT",
         "projectPath": "G:\\WEB\\WorkedCityMapsBackend\\BackendCityMaps\\WorkedCityMapBackend\\AuthJWT\\AuthJWT.csproj",
-        "packagesPath": "C:\\Users\\Izana\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\rkali\\.nuget\\packages\\",
         "outputPath": "G:\\WEB\\WorkedCityMapsBackend\\BackendCityMaps\\WorkedCityMapBackend\\AuthJWT\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Izana\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\rkali\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -49,10 +49,6 @@
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[3.1.3, )"
-            },
-            "Mime": {
-              "target": "Package",
-              "version": "[3.1.0, )"
             },
             "NLog": {
               "target": "Package",
@@ -89,7 +85,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

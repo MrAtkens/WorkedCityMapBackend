@@ -24,4 +24,8 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\PinPublicImages\75c57e83-504f-fa3c-aee0-929fd48974e7\" />
+  </ItemGroup>
+
 </Project>

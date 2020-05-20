@@ -59,5 +59,6 @@ G:\WEB\WorkedCityMapsBackend\BackendCityMaps\WorkedCityMapBackend\AuthJWT\bin\De
 G:\WEB\WorkedCityMapsBackend\BackendCityMaps\WorkedCityMapBackend\AuthJWT\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
 G:\WEB\WorkedCityMapsBackend\BackendCityMaps\WorkedCityMapBackend\AuthJWT\obj\Debug\netcoreapp3.1\AuthJWT.dll
 G:\WEB\WorkedCityMapsBackend\BackendCityMaps\WorkedCityMapBackend\AuthJWT\obj\Debug\netcoreapp3.1\AuthJWT.pdb
-G:\WEB\WorkedCityMapsBackend\BackendCityMaps\WorkedCityMapBackend\AuthJWT\bin\Debug\netcoreapp3.1\MimeMapping.dll
 G:\WEB\WorkedCityMapsBackend\BackendCityMaps\WorkedCityMapBackend\AuthJWT\obj\Debug\netcoreapp3.1\AuthJWT.MvcApplicationPartsAssemblyInfo.cache
+G:\WEB\WorkedCityMapsBackend\BackendCityMaps\WorkedCityMapBackend\AuthJWT\obj\Debug\netcoreapp3.1\AuthJWT.csproj.CoreCompileInputs.cache
+G:\WEB\WorkedCityMapsBackend\BackendCityMaps\WorkedCityMapBackend\AuthJWT\obj\Debug\netcoreapp3.1\AuthJWT.genruntimeconfig.cache
