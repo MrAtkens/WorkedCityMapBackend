@@ -1,0 +1,9 @@
+G:\WEB\WorkedCityMapBackend\DTOs\bin\Debug\netcoreapp3.1\DTOs.deps.json
+G:\WEB\WorkedCityMapBackend\DTOs\bin\Debug\netcoreapp3.1\DTOs.dll
+G:\WEB\WorkedCityMapBackend\DTOs\obj\Debug\netcoreapp3.1\DTOs.csprojAssemblyReference.cache
+G:\WEB\WorkedCityMapBackend\DTOs\obj\Debug\netcoreapp3.1\DTOs.AssemblyInfoInputs.cache
+G:\WEB\WorkedCityMapBackend\DTOs\obj\Debug\netcoreapp3.1\DTOs.AssemblyInfo.cs
+G:\WEB\WorkedCityMapBackend\DTOs\bin\Debug\netcoreapp3.1\DTOs.pdb
+G:\WEB\WorkedCityMapBackend\DTOs\obj\Debug\netcoreapp3.1\DTOs.csproj.CoreCompileInputs.cache
+G:\WEB\WorkedCityMapBackend\DTOs\obj\Debug\netcoreapp3.1\DTOs.dll
+G:\WEB\WorkedCityMapBackend\DTOs\obj\Debug\netcoreapp3.1\DTOs.pdb

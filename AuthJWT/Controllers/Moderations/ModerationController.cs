@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core;
 using System.Threading.Tasks;
 using AuthJWT.DTOs;
 using AuthJWT.Models;
+using AuthJWT.Options;
 using AuthJWT.Services.PublicPins;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -12,8 +14,8 @@ using Microsoft.Extensions.Logging;
 namespace AuthJWT.Controllers
 {
     [Route("api/[controller]/[action]")]
-    [EnableCors("ModerationPolicy")]
-    //[Authorize]
+    [EnableCors(CorsOrigins.AdminPanelPolicy)]
+    [Authorize(Roles = Role.Moderator)]
     [ApiController]
     public class ModerationController : ControllerBase
     {
@@ -35,6 +37,11 @@ namespace AuthJWT.Controllers
             {
                  List<ProblemPin> moderateProblemPins = await moderationPinService.GetModerationPins();
                 return Ok(new { moderateProblemPins, status = true });
+            }
+            catch(ObjectNotFoundException ex)
+            {
+                logger.LogError(ex.Message);
+                return StatusCode(404, new { status = false });
             }
             catch (Exception ex)
             {

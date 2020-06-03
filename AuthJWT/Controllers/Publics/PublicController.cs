@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AuthJWT.DTOs;
 using AuthJWT.Models;
+using AuthJWT.Options;
 using AuthJWT.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Logging;
 
 namespace AuthJWT.Controllers
 {
     [Route("api/[controller]/[action]")]
-    [EnableCors("FrontPolicy")]
+    [EnableCors(CorsOrigins.FrontPolicy)]
     [ApiController]
     public class PublicController : ControllerBase
     {
@@ -44,6 +45,7 @@ namespace AuthJWT.Controllers
         }
 
         [HttpGet("{id}")]
+
         public async Task<IActionResult> GetPublicMapPinById(Guid id)
         {
             try
@@ -64,13 +66,12 @@ namespace AuthJWT.Controllers
          }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProblemPin([FromForm]ProblemPinDTO problemPinDTO)
+        [Authorize(Roles = Role.User)]
+        public async Task<IActionResult> CreateProblemPin([FromForm]ProblemPinDTO problemPinDTO, Guid userId)
         {
             try
             {
-
-                string ip = Request.HttpContext.Connection.RemoteIpAddress.ToString();
-                bool answer = await publicPinServiceCRUD.AddPublicPin(problemPinDTO, ip);
+                bool answer = await publicPinServiceCRUD.AddPublicPin(problemPinDTO, userId);
                 return Ok(new { answer });
             }
             catch (Exception ex)

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AuthJWT.Models;
+using AuthJWT.Options;
 using AuthJWT.Services.PublicPins;
+using DTOs.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -10,8 +12,8 @@ using Microsoft.Extensions.Logging;
 namespace AuthJWT.Controllers.Moderations
 {
     [Route("api/[controller]/[action]")]
-    [EnableCors("ModerationPolicy")]
-    //[Authorize]
+    [EnableCors(CorsOrigins.AdminPanelPolicy)]
+    [Authorize(Roles = Role.Moderator)]
     [ApiController]
     public class SolvedUDController : ControllerBase
     {
@@ -30,12 +32,14 @@ namespace AuthJWT.Controllers.Moderations
         {
             try
             {
-                bool answer = await solvedPinService.EditSolvedPin(Id, solvedPin);
-                return Ok(new { answer });
+                ResponseDTO answer = await solvedPinService.EditSolvedPin(Id, solvedPin);
+                return Ok(answer);
             }
             catch (Exception ex) {
                 logger.LogError(ex.Message);
-                return StatusCode(500, new { status = false });
+                return StatusCode(500, new ResponseDTO { Message = "Извините на данный момент на сервере ошибка, пожалуйста попробуйте позднее.",
+                    Status = false,
+                    StatusCode = 500});
             }
         }
 

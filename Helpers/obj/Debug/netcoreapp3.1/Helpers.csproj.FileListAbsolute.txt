@@ -1,0 +1,12 @@
+G:\WEB\WorkedCityMapBackend\Helpers\obj\Debug\netcoreapp3.1\Helpers.csprojAssemblyReference.cache
+G:\WEB\WorkedCityMapBackend\Helpers\obj\Debug\netcoreapp3.1\Helpers.csproj.CoreCompileInputs.cache
+G:\WEB\WorkedCityMapBackend\Helpers\obj\Debug\netcoreapp3.1\Helpers.AssemblyInfoInputs.cache
+G:\WEB\WorkedCityMapBackend\Helpers\obj\Debug\netcoreapp3.1\Helpers.AssemblyInfo.cs
+G:\WEB\WorkedCityMapBackend\Helpers\bin\Debug\netcoreapp3.1\Helpers.deps.json
+G:\WEB\WorkedCityMapBackend\Helpers\bin\Debug\netcoreapp3.1\Helpers.dll
+G:\WEB\WorkedCityMapBackend\Helpers\bin\Debug\netcoreapp3.1\Helpers.pdb
+G:\WEB\WorkedCityMapBackend\Helpers\bin\Debug\netcoreapp3.1\Models.dll
+G:\WEB\WorkedCityMapBackend\Helpers\bin\Debug\netcoreapp3.1\Models.pdb
+G:\WEB\WorkedCityMapBackend\Helpers\obj\Debug\netcoreapp3.1\Helpers.csproj.CopyComplete
+G:\WEB\WorkedCityMapBackend\Helpers\obj\Debug\netcoreapp3.1\Helpers.dll
+G:\WEB\WorkedCityMapBackend\Helpers\obj\Debug\netcoreapp3.1\Helpers.pdb

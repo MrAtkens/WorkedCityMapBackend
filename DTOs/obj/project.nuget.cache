@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "eogTA1tK2+HSbBDAsNqQIpX5AhnYMr9HnRRG1Onweu9mmfeH/5Rcrou5/UuftAmzeQrPlJ52B99aLqetbLlm6A==",
+  "success": true,
+  "projectFilePath": "G:\\WEB\\WorkedCityMapBackend\\DTOs\\DTOs.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\rkali\\.nuget\\packages\\microsoft.aspnetcore.http.features\\3.1.4\\microsoft.aspnetcore.http.features.3.1.4.nupkg.sha512",
+    "C:\\Users\\rkali\\.nuget\\packages\\microsoft.extensions.primitives\\3.1.4\\microsoft.extensions.primitives.3.1.4.nupkg.sha512",
+    "C:\\Users\\rkali\\.nuget\\packages\\system.io.pipelines\\4.7.1\\system.io.pipelines.4.7.1.nupkg.sha512"
+  ],
+  "logs": []
+}

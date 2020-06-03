@@ -1,0 +1,9 @@
+G:\WEB\WorkedCityMapBackend\Options\bin\Debug\netcoreapp3.1\Options.deps.json
+G:\WEB\WorkedCityMapBackend\Options\bin\Debug\netcoreapp3.1\Options.dll
+G:\WEB\WorkedCityMapBackend\Options\bin\Debug\netcoreapp3.1\Options.pdb
+G:\WEB\WorkedCityMapBackend\Options\obj\Debug\netcoreapp3.1\Options.csprojAssemblyReference.cache
+G:\WEB\WorkedCityMapBackend\Options\obj\Debug\netcoreapp3.1\Options.csproj.CoreCompileInputs.cache
+G:\WEB\WorkedCityMapBackend\Options\obj\Debug\netcoreapp3.1\Options.AssemblyInfoInputs.cache
+G:\WEB\WorkedCityMapBackend\Options\obj\Debug\netcoreapp3.1\Options.AssemblyInfo.cs
+G:\WEB\WorkedCityMapBackend\Options\obj\Debug\netcoreapp3.1\Options.dll
+G:\WEB\WorkedCityMapBackend\Options\obj\Debug\netcoreapp3.1\Options.pdb

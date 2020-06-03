@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AuthJWT.Models;
+using AuthJWT.Options;
 using AuthJWT.Services.PublicPins;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace AuthJWT.Controllers
 {
     [Route("api/[controller]/[action]")]
-    [EnableCors("FrontPolicy")]
+    [EnableCors(CorsOrigins.FrontPolicy)]
     [ApiController]
+
     public class SolvedPublicController : ControllerBase
     {
         private readonly ILogger<SolvedPublicController> logger;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AuthJWT.Models;
+using AuthJWT.Options;
 using AuthJWT.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -10,8 +11,8 @@ using Microsoft.Extensions.Logging;
 namespace AuthJWT.Controllers
 {
     [Route("api/[controller]/[action]")]
-    [EnableCors("ModerationPolicy")]
-    //[Authorize]
+    [EnableCors(CorsOrigins.AdminPanelPolicy)]
+    [Authorize(Roles = Role.Moderator)]
     [ApiController]
     public class PublicUDController : ControllerBase
     {
