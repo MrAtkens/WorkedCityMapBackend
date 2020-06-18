@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
 
 namespace AuthJWT.Models.AuthModels
 {
     public class Admin : ModeratorEntity
     {
-        public List<Moderator> AddedModerators { get; set; }
-        public List<Team> AddedTeams { get; set; } 
-        public bool IsSuper { get; set; }
+        public int AddedModerators { get; set; }
+        public int AddedTeams { get; set; }
+        public DateTime AdminAddedDate { get; set; } = DateTime.Now;
     }
 }

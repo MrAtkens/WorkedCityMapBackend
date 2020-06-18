@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "d6AfEPpiWp09ybAESjCQZa2eGpACQa7+yEAf287oyMzjN82T4uyK4Dj2f63cC4J+OVtDS5oHKtl4a+6jewjGvw==",
+  "dgSpecHash": "iAbTSgslr751iVDDlw6Yxk34zubMhKg8gOW+FQC6OfQTQ0GsnVe4Xu2Ss/Xz/O0nwk2Ym2E6dIqWFwKnl0By+w==",
   "success": true,
   "projectFilePath": "G:\\WEB\\WorkedCityMapBackend\\DataAcces\\DataAcces.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\rkali\\.nuget\\packages\\bcrypt.net-core\\1.6.0\\bcrypt.net-core.1.6.0.nupkg.sha512",
     "C:\\Users\\rkali\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "C:\\Users\\rkali\\.nuget\\packages\\microsoft.bcl.hashcode\\1.1.0\\microsoft.bcl.hashcode.1.1.0.nupkg.sha512",
     "C:\\Users\\rkali\\.nuget\\packages\\microsoft.entityframeworkcore\\3.1.4\\microsoft.entityframeworkcore.3.1.4.nupkg.sha512",

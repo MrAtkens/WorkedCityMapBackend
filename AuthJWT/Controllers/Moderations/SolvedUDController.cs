@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity.Core;
 using System.Threading.Tasks;
 using AuthJWT.Models;
 using AuthJWT.Options;
@@ -28,18 +29,27 @@ namespace AuthJWT.Controllers.Moderations
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> EditSolvedPin(Guid Id, SolvedPin solvedPin)
+        public async Task<IActionResult> EditSolvedPin(Guid Id, [FromBody]SolvedPin solvedPin)
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
                 ResponseDTO answer = await solvedPinService.EditSolvedPin(Id, solvedPin);
                 return Ok(answer);
+            }
+            catch (ObjectNotFoundException ex)
+            {
+                logger.LogError(ex.Message);
+                return StatusCode(404, new ResponseDTO() { Message = "Пин не найден", Status = false });
             }
             catch (Exception ex) {
                 logger.LogError(ex.Message);
                 return StatusCode(500, new ResponseDTO { Message = "Извините на данный момент на сервере ошибка, пожалуйста попробуйте позднее.",
-                    Status = false,
-                    StatusCode = 500});
+                    Status = false });
             }
         }
 
@@ -48,13 +58,22 @@ namespace AuthJWT.Controllers.Moderations
         {
             try
             {
-                bool answer = await solvedPinService.DeleteSolvedPin(Id);
-                return Ok(new { answer });
+                ResponseDTO answer = await solvedPinService.DeleteSolvedPin(Id);
+                return Ok(answer);
+            }
+            catch (ObjectNotFoundException ex)
+            {
+                logger.LogError(ex.Message);
+                return StatusCode(404, new ResponseDTO() { Message = "Пин не найден", Status = false });
             }
             catch (Exception ex)
             {
                 logger.LogError(ex.Message);
-                return StatusCode(500, new { status = false });
+                return StatusCode(500, new ResponseDTO()
+                {
+                    Message = "На данный момент на стороне сервера ошибка сообщите администратору",
+                    Status = false
+                });
             }
         }
     }

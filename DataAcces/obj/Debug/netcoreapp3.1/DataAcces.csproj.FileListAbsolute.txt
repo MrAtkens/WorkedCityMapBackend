@@ -4,7 +4,6 @@ G:\WEB\WorkedCityMapBackend\DataAcces\obj\Debug\netcoreapp3.1\DataAcces.csprojAs
 G:\WEB\WorkedCityMapBackend\DataAcces\obj\Debug\netcoreapp3.1\DataAcces.AssemblyInfoInputs.cache
 G:\WEB\WorkedCityMapBackend\DataAcces\obj\Debug\netcoreapp3.1\DataAcces.AssemblyInfo.cs
 G:\WEB\WorkedCityMapBackend\DataAcces\bin\Debug\netcoreapp3.1\Models.dll
-G:\WEB\WorkedCityMapBackend\DataAcces\obj\Debug\netcoreapp3.1\DataAcces.csproj.CoreCompileInputs.cache
 G:\WEB\WorkedCityMapBackend\DataAcces\bin\Debug\netcoreapp3.1\DataAcces.pdb
 G:\WEB\WorkedCityMapBackend\DataAcces\bin\Debug\netcoreapp3.1\Options.dll
 G:\WEB\WorkedCityMapBackend\DataAcces\bin\Debug\netcoreapp3.1\Models.pdb
@@ -12,3 +11,4 @@ G:\WEB\WorkedCityMapBackend\DataAcces\bin\Debug\netcoreapp3.1\Options.pdb
 G:\WEB\WorkedCityMapBackend\DataAcces\obj\Debug\netcoreapp3.1\DataAcces.csproj.CopyComplete
 G:\WEB\WorkedCityMapBackend\DataAcces\obj\Debug\netcoreapp3.1\DataAcces.dll
 G:\WEB\WorkedCityMapBackend\DataAcces\obj\Debug\netcoreapp3.1\DataAcces.pdb
+G:\WEB\WorkedCityMapBackend\DataAcces\obj\Debug\netcoreapp3.1\DataAcces.csproj.CoreCompileInputs.cache

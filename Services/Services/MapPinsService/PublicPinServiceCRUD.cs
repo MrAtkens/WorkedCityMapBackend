@@ -2,6 +2,7 @@
 using AuthJWT.DTOs;
 using AuthJWT.Models;
 using AuthJWT.Models.Images;
+using DTOs.DTOs;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -26,7 +27,7 @@ namespace AuthJWT.Services
             this.publicPinContext = publicPinContext;
             this.moderatePinContext = moderatePinContext;
         }
-        public async Task<bool> AddPublicPin(ProblemPinDTO problemPinDTO, Guid userId)
+        public async Task<ResponseDTO> AddPublicPin(ProblemPinDTO problemPinDTO, Guid userId)
         {
             List<ProblemImages> uploadedImages = new List<ProblemImages>();
             if (problemPinDTO.Files.Count > 0)
@@ -73,11 +74,11 @@ namespace AuthJWT.Services
                 {
                     cache.Set(problemPin.Id, problemPin, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(5)));
                 }
-                return true;
+                return new ResponseDTO() { Message = "Пин успешно добавлен и на данный момент проходит модерацию", Status = true }; ;
             }
             else
             {
-                return false;
+                return new ResponseDTO() { Message = "Ошибка с загрузкой фотографий", Status = false }; ;
             }
          }
 
@@ -97,7 +98,7 @@ namespace AuthJWT.Services
         }
 
 
-        public async Task<bool> EditPublicPin(Guid oldDataId, ProblemPin newProblemPin)
+        public async Task<ResponseDTO> EditPublicPin(Guid oldDataId, ProblemPin newProblemPin)
         {
                 var foundedPin = await publicPinContext.ProblemPins.Include(problemPin => problemPin.Images).FirstOrDefaultAsync(pins => pins.Id == oldDataId);
                 publicPinContext.Entry(foundedPin).CurrentValues.SetValues(newProblemPin);
@@ -106,10 +107,10 @@ namespace AuthJWT.Services
                 {
                     cache.Set(foundedPin.Id, foundedPin, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(5)));
                 }
-                return true;
+                return new ResponseDTO() { Message = "Пин успешно изменён", Status = true };
         }
 
-        public async Task<bool> DeletePublicPin(Guid oldDataId)
+        public async Task<ResponseDTO> DeletePublicPin(Guid oldDataId)
         {
              var foundedPin = await publicPinContext.ProblemPins.Include(problemPin => problemPin.Images).FirstOrDefaultAsync(pins => pins.Id == oldDataId);
              foreach (ImageCustom image in foundedPin.Images)
@@ -122,7 +123,7 @@ namespace AuthJWT.Services
             }
             publicPinContext.ProblemPins.Remove(foundedPin);
             await publicPinContext.SaveChangesAsync();
-            return true;
+            return new ResponseDTO() { Message = "Пин успешно удалён", Status = true };
         }
     }
 }

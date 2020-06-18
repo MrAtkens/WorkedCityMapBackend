@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core;
 using System.Threading.Tasks;
 using AuthJWT.Models;
 using AuthJWT.Options;
 using AuthJWT.Services.PublicPins;
+using DTOs.DTOs;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -37,7 +39,11 @@ namespace AuthJWT.Controllers
             catch(Exception ex)
             {
                 logger.LogError(ex.Message);
-                return StatusCode(500, new { status = false });
+                return StatusCode(500, new ResponseDTO()
+                {
+                    Message = "На данный момент на стороне сервера ошибка, пожалуйста повторите попытку позже",
+                    Status = false
+                });
             }
         }
 
@@ -50,14 +56,23 @@ namespace AuthJWT.Controllers
                 if (solvedPin == null)
                 {
                     logger.LogInformation($"GetSolvedMapPinById dont found Id: {id}");
-                    return NotFound(new { status = false });
+                    return NotFound(new ResponseDTO() { Message = "Пин не найден", Status = false });
                 }
                 return Ok(new { solvedPin, status = false });
+            }
+            catch (ObjectNotFoundException ex)
+            {
+                logger.LogError(ex.Message);
+                return StatusCode(404, new ResponseDTO() { Message = "Пин не найден", Status = false });
             }
             catch (Exception ex)
             {
                 logger.LogError(ex.Message);
-                return StatusCode(500, new { status = false });
+                return StatusCode(500, new ResponseDTO()
+                {
+                    Message = "На данный момент на стороне сервера ошибка, пожалуйста повторите попытку позже",
+                    Status = false
+                });
             }
         }
 

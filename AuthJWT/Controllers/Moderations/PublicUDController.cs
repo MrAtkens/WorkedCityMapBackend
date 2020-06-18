@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Data.Entity.Core;
 using System.Threading.Tasks;
 using AuthJWT.Models;
 using AuthJWT.Options;
 using AuthJWT.Services;
+using DTOs.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -31,13 +33,27 @@ namespace AuthJWT.Controllers
         {
             try
             {
-                bool answer = await publicPinServiceCRUD.EditPublicPin(Id, problemPin);
-                return Ok(new { answer });
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                ResponseDTO answer = await publicPinServiceCRUD.EditPublicPin(Id, problemPin);
+                return Ok(answer);
             }
-            catch(Exception ex)
+            catch (ObjectNotFoundException ex)
             {
                 logger.LogError(ex.Message);
-                return StatusCode(500, new { status = false });
+                return StatusCode(404, new ResponseDTO() { Message = "Пин не найден", Status = false });
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return StatusCode(500, new ResponseDTO()
+                {
+                    Message = "На данный момент на стороне сервера ошибка сообщите администратору",
+                    Status = false
+                });
             }
         }
 
@@ -46,13 +62,22 @@ namespace AuthJWT.Controllers
         {
             try
             {
-                bool answer = await publicPinServiceCRUD.DeletePublicPin(Id);
-                return Ok(new { answer });
+                ResponseDTO answer = await publicPinServiceCRUD.DeletePublicPin(Id);
+                return Ok(answer);
             }
-            catch(Exception ex)
+            catch (ObjectNotFoundException ex)
             {
                 logger.LogError(ex.Message);
-                return StatusCode(500, new { status = false });
+                return StatusCode(404, new ResponseDTO() { Message = "Пин не найден", Status = false });
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return StatusCode(500, new ResponseDTO()
+                {
+                    Message = "На данный момент на стороне сервера ошибка сообщите администратору",
+                    Status = false
+                });
             }
          }
         

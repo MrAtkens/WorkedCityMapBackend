@@ -4,8 +4,8 @@ namespace AuthJWT.Models.AuthModels
 {
     public class Moderator : ModeratorEntity
     { 
-        public string ModeratedPinsCount { get; set; }
-        public string AcceptedWorksCount { get; set; }
-        public DateTime ModeratorAddedDate { get; set; } 
+        public int ModeratedPinsCount { get; set; }
+        public int AcceptedWorksCount { get; set; }
+        public DateTime ModeratorAddedDate { get; set; } = DateTime.Now;
     }
 }

@@ -9,6 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Twilio.Http;
+using DTOs.DTOs;
+using AuthJWT.Models.AuthModels;
 
 namespace AuthJWT.Services.PublicPins
 {
@@ -47,21 +50,19 @@ namespace AuthJWT.Services.PublicPins
             return foundedPin;
         }
 
-        public async Task<bool> EditModerationPin(Guid oldDataId, ProblemPin newModerateProblemPin)
+        public async Task<ResponseDTO> EditModerationPin(ProblemPin foundedPin, ProblemPinDTO newModerateProblemPin)
         {
-                ProblemPin foundedPin = await moderatePinContext.ModerateProblemPins.FirstOrDefaultAsync(pins => pins.Id == oldDataId);
                 moderatePinContext.Entry(foundedPin).CurrentValues.SetValues(newModerateProblemPin);
                 int count = await moderatePinContext.SaveChangesAsync();
                 if (count > 0)
                 {
                     cache.Set(foundedPin.Id, foundedPin, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(5)));
                 }
-                return true;
+                return new ResponseDTO() { Message = "Пин изменён успешно", Status = true };
         }
 
-        public async Task<bool> DeleteModerationPin(Guid oldDataId)
+        public async Task<ResponseDTO> DeleteModerationPin(ProblemPin foundedPin)
         {
-            ProblemPin foundedPin = await moderatePinContext.ModerateProblemPins.FirstOrDefaultAsync(pins => pins.Id == oldDataId);
             if (foundedPin.Images != null)
             {
                 foreach (ImageCustom image in foundedPin.Images)
@@ -70,17 +71,17 @@ namespace AuthJWT.Services.PublicPins
                 }
             }
             ProblemPin bufferPin = foundedPin;
-            if (cache.TryGetValue(oldDataId, out bufferPin))
+            if (cache.TryGetValue(foundedPin.Id, out bufferPin))
             {
                 cache.Remove(foundedPin.Id);
             }
             moderatePinContext.ModerateProblemPins.Remove(foundedPin);
             await moderatePinContext.SaveChangesAsync();
-            return true;
+            return new ResponseDTO() { Message = "Пин удалён", Status = true }; ;
         }
 
 
-        public async Task<bool> ModerationAcceptPin(AcceptDTO acceptDTO)
+        public async Task<ResponseDTO> ModerationAcceptPin(AcceptDTO acceptDTO, Moderator moderator)
         {
                 //Remove from Moderation database table
                 ProblemPin foundedPin = await moderatePinContext.ModerateProblemPins.Include(problemPin => problemPin.Images).FirstOrDefaultAsync(pins => pins.Id == acceptDTO.Id);
@@ -92,12 +93,20 @@ namespace AuthJWT.Services.PublicPins
                 int count = await publicPinContext.SaveChangesAsync();
                 if (count > 0)
                 {
+                    Moderator newModerator = moderator;
+                    newModerator.ModeratedPinsCount += 1;
+                    moderatePinContext.Entry(moderator).CurrentValues.SetValues(newModerator);
+                    int countModerator = await moderatePinContext.SaveChangesAsync();
+                    if (countModerator > 0)
+                    {
+                        cache.Set(newModerator.Id, newModerator, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(5)));
+                    }
                     cache.Set(foundedPin.Id, foundedPin, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(5)));
                 }
-                return true;
+                return new ResponseDTO() { Message = "Пин успешно прошёл модерацию и добавлен в публичную базу", Status = true};
         }
 
-        public async Task<bool> SolvedProblemPinAccept(SolvedPinDTO solvedPinDTO)
+        public async Task<ResponseDTO> SolvedProblemPinAccept(SolvedPinDTO solvedPinDTO)
         {
                 //Remove from Moderation database table
                 ProblemPin foundedPin = await publicPinContext.ProblemPins.Include(problemPin => problemPin.Images).FirstOrDefaultAsync(pins => pins.Id == solvedPinDTO.Id);
@@ -153,11 +162,11 @@ namespace AuthJWT.Services.PublicPins
                 {
                     cache.Set(solvedPin.Id, solvedPin, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(5)));
                 }
-                return true;
+                return new ResponseDTO() { Message = "Решение пина успешно подтверждено, пин добавлен в базу решённых пинов", Status = true };
              }
              else {
-                   return false;
-             }
+                return new ResponseDTO() { Message = "Ошибка с загрузкой фотографий", Status = false }; ;
+            }
         }
 
     }

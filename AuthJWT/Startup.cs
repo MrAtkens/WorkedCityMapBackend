@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Services.Services.AdministartionAccountsService;
+using Services.Services.ModeratersAccountsService;
 using System.Text;
 
 namespace AuthJWT
@@ -26,17 +28,22 @@ namespace AuthJWT
         {
             services.AddDirectoryBrowser();
             services.Configure<SecretOptions>(configuration.GetSection("Secrets"));
-            services.AddDbContext<UserContext>(options => options.UseSqlServer(configuration.GetConnectionString("MapConnectionString")));
-            services.AddDbContext<ModerateContext>(options => options.UseSqlServer(configuration.GetConnectionString("ModerateConnectionString")));
             services.AddDbContext<PinsContext>(options => options.UseSqlServer(configuration.GetConnectionString("MapConnectionString")));
+            services.AddDbContext<ModerateContext>(options => options.UseSqlServer(configuration.GetConnectionString("ModerateConnectionString")));
+            services.AddDbContext<UserContext>(options => options.UseSqlServer(configuration.GetConnectionString("UsersConnectionString")));
 
+            services.AddTransient<PublicPinServiceGet>();
             services.AddTransient<PublicPinServiceCRUD>();
             services.AddTransient<ModerationPinService>();
             services.AddTransient<SolvedPinService>();
+            services.AddTransient<SmsService>();
 
-            services.AddTransient<PublicPinServiceGet>();
-
+            services.AddTransient<AdminsCrudService>();
+            services.AddTransient<ModeratorsCrudService>();
+     
             services.AddScoped<UserAuthService>();
+            services.AddScoped<AdministrationAuthService>();
+
 
             services.AddMemoryCache();
 
@@ -62,9 +69,7 @@ namespace AuthJWT
 
             services.AddDirectoryBrowser();
 
-            services.AddControllers().AddNewtonsoftJson(options =>
-                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-            );
+            services.AddControllers();
 
             var secrets = configuration.GetSection("Secrets");
             var key = Encoding.ASCII.GetBytes(secrets.GetValue<string>("JWTSecret"));
@@ -75,7 +80,7 @@ namespace AuthJWT
             })
             .AddJwtBearer(x =>
             {
-                x.RequireHttpsMetadata = false;
+                x.RequireHttpsMetadata = true;
                 x.SaveToken = true;
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -110,9 +115,9 @@ namespace AuthJWT
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors();
-            
-            app.UseAuthorization();
+
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

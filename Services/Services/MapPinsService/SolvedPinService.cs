@@ -55,15 +55,15 @@ namespace AuthJWT.Services.PublicPins
                 {
                     cache.Set(foundedPin.Id, foundedPin, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(5)));
                 }
-                return new ResponseDTO {Message="Пин изменён успешно", StatusCode=200, Status=true};
+                return new ResponseDTO {Message="Пин изменён успешно", Status=true};
             }
             catch(Exception ex)
             {
-                return new ResponseDTO { Message = "В", StatusCode = 500, Status = false }; ;
+                return new ResponseDTO { Message = "Извените на данный момент на стороне сервера ошибка, попробуйте позже", Status = false }; ;
             }
         }
 
-        public async Task<bool> DeleteSolvedPin(Guid oldDataId)
+        public async Task<ResponseDTO> DeleteSolvedPin(Guid oldDataId)
         {
             var foundedPin = await solvedPinContext.SolvedPins.Include(problemPin => problemPin.Images).FirstOrDefaultAsync(pins => pins.Id == oldDataId);
             foreach (ImageCustom image in foundedPin.Images)
@@ -83,7 +83,7 @@ namespace AuthJWT.Services.PublicPins
             }
             solvedPinContext.SolvedPins.Remove(foundedPin);
             await solvedPinContext.SaveChangesAsync();
-            return true;
+            return new ResponseDTO() { Message = "Пин успешно удалён", Status = true};
         }
     }
 }

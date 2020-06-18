@@ -1,6 +1,7 @@
 ﻿using AuthJWT.Models;
 using AuthJWT.Models.AuthModels;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace AuthJWT.DataAcces
 {
@@ -22,12 +23,14 @@ namespace AuthJWT.DataAcces
         {
             modelBuilder.Entity<Admin>().HasData(new Admin
              {
-               Login = "admin",
-               Password = "admin",
-               IsSuper = true,
+               Login = "Admin1234",
+               Password = BCrypt.Net.BCrypt.HashPassword("Admin1234").ToString(),
                FirstName = "Admin",
                LastName = "Admin",
                Role = Role.SuperAdmin,
+               AddedModerators = 0,
+               AddedTeams = 0,
+               AdminAddedDate = DateTime.Now
              });
         }
     }

@@ -3,6 +3,7 @@ using AuthJWT.DTOs;
 using AuthJWT.Helpers;
 using AuthJWT.Models;
 using AuthJWT.Options;
+using DTOs.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -11,6 +12,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Twilio.Rest.Trunking.V1;
 
 namespace AuthJWT.Services
 {
@@ -25,34 +27,48 @@ namespace AuthJWT.Services
             jwtSecret = secretOptions.Value.JWTSecret;
         }
 
-        public async Task<bool> Registration(AuthDTO authDTO)
+        public async Task<ResponseDTO> CheckUser(string phoneNumber)
         {
-            string password = BCrypt.Net.BCrypt.HashPassword(authDTO.Password);
-            User user = new User() { Phone = authDTO.Phone, Password = password, Role = Role.User };
-            try
+            User foundedUser = await context.Users.FirstOrDefaultAsync(user => user.Phone == phoneNumber);
+            if(foundedUser == null)
             {
-                User foundedUser = await context.Users.FirstOrDefaultAsync(user => user.Phone == user.Phone);
-                if(foundedUser.Phone == user.Phone)
-                {
-                    return false;
-                }
-                context.Users.Add(user);
-                await context.SaveChangesAsync();
-                return true;
+                return new ResponseDTO() { Status = true };
             }
-            catch (Exception ex)
+            else
             {
-                return false;
+                return new ResponseDTO() { Message = "Данный пользователь уже существует", Status = false };
             }
         }
-        public async Task<User> Authenticate(AuthDTO authDTO)
+
+        public async Task<ResponseDTO> Registration(RegistartionUserDTO registartionDTO)
         {
-            string password = BCrypt.Net.BCrypt.HashPassword(authDTO.Password);
-            var existingUser = await context.Users.FirstOrDefaultAsync(user => user.Phone == authDTO.Phone && user.Password == password);
-            if(existingUser == null)
+            var existingCode = await context.Codes.FirstOrDefaultAsync(code => code.PhoneNumber == registartionDTO.Phone && code.Code == registartionDTO.VerificationCode);
+            if(existingCode == null)
             {
-                existingUser.Token = null;
+                return new ResponseDTO() { Message = "Данный верификационный код не найден либо не верен", Status = false };
+            }
+            else
+            {
+                context.Codes.Remove(existingCode);
+                await context.SaveChangesAsync();
+            }
+            string password = BCrypt.Net.BCrypt.HashPassword(registartionDTO.Password);
+            User user = new User() { Phone = registartionDTO.Phone, Password = password, Role = Role.User };
+            context.Users.Add(user);
+            await context.SaveChangesAsync();
+            return new ResponseDTO() { Message = "Вы успешно зарегистрировались", Status = true };
+        }
+        public async Task<User> Authenticate(AuthUserDTO authDTO)
+        {
+            User existingUser = await context.Users.FirstOrDefaultAsync(user => user.Phone == authDTO.Phone);
+            if (existingUser == null)
+            {
                 return existingUser;
+            }
+            bool isPasswordCorrect = BCrypt.Net.BCrypt.Verify(authDTO.Password, existingUser.Password);
+            if (!isPasswordCorrect)
+            {
+                return null;
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -70,6 +86,31 @@ namespace AuthJWT.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
             existingUser.Token = tokenHandler.WriteToken(token);
             return existingUser.UserWithoutPassword();
+        }
+
+        public async Task<ResponseDTO> PasswordChange(RegistartionUserDTO registartionDTO)
+        {
+            var existingCode = await context.Codes.FirstOrDefaultAsync(code => code.PhoneNumber == registartionDTO.Phone && code.Code == registartionDTO.VerificationCode);
+            if (existingCode == null)
+            {
+                return new ResponseDTO() { Message = "Данный верификационный код не найден либо не верен", Status = false };
+            }
+            else
+            {
+                context.Codes.Remove(existingCode);
+                await context.SaveChangesAsync();
+            }
+            User foundedUser = await context.Users.FirstOrDefaultAsync(user => user.Phone == registartionDTO.Phone);
+            
+            if(foundedUser == null)
+            {
+                return new ResponseDTO() { Message = "Данный пользователь не найден", Status = false };
+            }
+            User newPasswordUser = foundedUser;
+            newPasswordUser.Password = registartionDTO.Password;
+            context.Entry(foundedUser).CurrentValues.SetValues(newPasswordUser);
+            await context.SaveChangesAsync();
+            return new ResponseDTO() { Message = "Пароль успешно изменён", Status = true};
         }
     }
 }

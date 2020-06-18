@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core;
 using System.Threading.Tasks;
 using AuthJWT.DTOs;
 using AuthJWT.Models;
 using AuthJWT.Options;
 using AuthJWT.Services;
+using DTOs.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -35,7 +37,8 @@ namespace AuthJWT.Controllers
             try
             {
                 List<ProblemPin> publicPins = await publicPinServiceGet.GetPublicPins();
-                return Ok(new { publicPins, status = true });
+                ResponseDTO answer = new ResponseDTO() { Status = true };
+                return Ok(new { publicPins, answer });
             }
             catch (Exception ex)
             {
@@ -54,11 +57,17 @@ namespace AuthJWT.Controllers
                 if (problemPin == null)
                 {
                     logger.LogInformation($"GetPublicMapPinById dont found Id: {id}");
-                    return NotFound(new { status = false });
+                    return NotFound(new ResponseDTO() { Message = "Пин не найден", Status = false });
                 }
-                return Ok(new { problemPin, status = true });
+                ResponseDTO answer = new ResponseDTO() { Status = true };
+                return Ok(new { problemPin, answer });
             }
-            catch(Exception ex)
+            catch (ObjectNotFoundException ex)
+            {
+                logger.LogError(ex.Message);
+                return StatusCode(404, new ResponseDTO() { Message = "Пин не найден", Status = false });
+            }
+            catch (Exception ex)
             {
                 logger.LogError(ex.Message);
                 return StatusCode(500, false);
@@ -67,12 +76,22 @@ namespace AuthJWT.Controllers
 
         [HttpPost]
         [Authorize(Roles = Role.User)]
-        public async Task<IActionResult> CreateProblemPin([FromForm]ProblemPinDTO problemPinDTO, Guid userId)
+        public async Task<IActionResult> CreateProblemPin([FromForm]ProblemPinDTO problemPinDTO)
         {
             try
             {
-                bool answer = await publicPinServiceCRUD.AddPublicPin(problemPinDTO, userId);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                ResponseDTO answer = await publicPinServiceCRUD.AddPublicPin(problemPinDTO, problemPinDTO.UserId);
                 return Ok(new { answer });
+            }
+            catch (ObjectNotFoundException ex)
+            {
+                logger.LogError(ex.Message);
+                return StatusCode(404, new ResponseDTO() { Message = "Данный пользователь не найден", Status = false });
             }
             catch (Exception ex)
             {

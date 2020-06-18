@@ -11,11 +11,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("AuthJWT")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("MrAtkens")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyDescriptionAttribute("This app helping to city infrastructur")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
-[assembly: System.Reflection.AssemblyProductAttribute("AuthJWT")]
+[assembly: System.Reflection.AssemblyProductAttribute("WorkedCityMap")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AuthJWT")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
