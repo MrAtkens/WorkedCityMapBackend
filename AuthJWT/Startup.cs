@@ -44,6 +44,8 @@ namespace AuthJWT
             services.AddScoped<UserAuthService>();
             services.AddScoped<AdministrationAuthService>();
 
+            services.AddHttpContextAccessor();
+
 
             services.AddMemoryCache();
 

@@ -95,7 +95,14 @@ namespace AuthJWT.Controllers.ModeratersCRUD
                     return StatusCode(400, check);
                 }
 
-                Admin admin = await adminsCrudService.GetAdminById(addModeratorDTO.AdminId);
+                check = await adminsCrudService.CheckAdminExistForAdd(addModeratorDTO.Login);
+
+                if (check.Status == false)
+                {
+                    return StatusCode(400, check);
+                }
+
+                Admin admin = await adminsCrudService.CheckAdminExist(addModeratorDTO.AdminId);
 
                 ResponseDTO answer = await moderatorsCrudService.AddModerator(admin, addModeratorDTO);
                 logger.LogInformation($"Модератор: {addModeratorDTO.Login}, был добавлен Админом {admin.Login}");

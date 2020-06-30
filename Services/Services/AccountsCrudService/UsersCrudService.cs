@@ -87,7 +87,7 @@ namespace Services.Services.AdministartionAccountsService
 
 
         //For Authenticate,
-        public async Task<User> CheckModeratorExist(string phone)
+        public async Task<User> CheckUserExist(string phone)
         {
             User foundedUser = await context.Users.FirstOrDefaultAsync(moderator => moderator.Phone == phone);
             if (foundedUser == null)
@@ -100,16 +100,16 @@ namespace Services.Services.AdministartionAccountsService
             }
         }
 
-        public async Task<Moderator> CheckModeratorExist(Guid id)
+        public async Task<User> CheckUserExist(Guid id)
         {
-            Moderator foundedModerator = await context.Moderators.FirstOrDefaultAsync(moderator => moderator.Id == id);
-            if (foundedModerator == null)
+            User foundedUser = await context.Users.FirstOrDefaultAsync(moderator => moderator.Id == id);
+            if (foundedUser == null)
             {
                 return null;
             }
             else
             {
-                return foundedModerator;
+                return foundedUser;
             }
         }
     }

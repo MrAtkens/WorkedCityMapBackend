@@ -7,7 +7,6 @@ namespace DTOs.DTOs.AuthModerations
     {
         [Required]
         public Guid AdminId { get; set; }
-        [Required]
-        public string AdminLogin { get; set; }
+
     }
 }

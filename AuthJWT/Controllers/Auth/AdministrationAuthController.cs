@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core;
+using System.Data.Entity.Core.Metadata.Edm;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AuthJWT.Models;
 using AuthJWT.Models.AuthModels;
@@ -11,6 +13,7 @@ using DTOs.DTOs;
 using DTOs.DTOs.AuthModerations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Services.Services.AdministartionAccountsService;
@@ -29,22 +32,23 @@ namespace AuthJWT.Controllers.Auth
         private readonly AdministrationAuthService administrationAuthService;
         private readonly AdminsCrudService adminCrudService;
         private readonly ModeratorsCrudService moderatorsCrudService;
-        public AdministrationAuthController(AdministrationAuthService administrationAuthService, ModeratorsCrudService moderatorsCrudService, AdminsCrudService adminCrudService, ILogger<AdministrationAuthController> logger)
+        private readonly IHttpContextAccessor httpContextAccessor;
+        public AdministrationAuthController(AdministrationAuthService administrationAuthService, ModeratorsCrudService moderatorsCrudService, 
+            AdminsCrudService adminCrudService, ILogger<AdministrationAuthController> logger, IHttpContextAccessor httpContextAccessor)
         {
             this.logger = logger;
             this.administrationAuthService = administrationAuthService;
             this.adminCrudService = adminCrudService;
             this.moderatorsCrudService = moderatorsCrudService;
-
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> AdminAuthenticate([FromBody]AdministartionAuthDTO adminAuthDTO)
+        public async Task<IActionResult> AdministartionAuthenticate([FromBody]AdministartionAuthDTO adminAuthDTO)
         {
             try
             {
-                
                 
                 if (!ModelState.IsValid)
                 {
@@ -52,20 +56,35 @@ namespace AuthJWT.Controllers.Auth
                 }
 
                 Admin existingAdmin = await adminCrudService.CheckAdminExist(adminAuthDTO.Login);
+                Moderator existingModerator = await moderatorsCrudService.CheckModeratorExist(adminAuthDTO.Login);
 
-                if (existingAdmin == null)
+                if (existingModerator == null && existingAdmin == null)
                 {
                     return NotFound(new ResponseDTO() { Message = "Данный пользователь не найден", Status = false });
                 }
-
-                Admin admin = administrationAuthService.AdminAuthenticate(existingAdmin, adminAuthDTO.Password);
-
-                return Ok(new { admin });
+                else if (existingModerator !=null && existingAdmin == null)
+                {
+                    Moderator moderator = administrationAuthService.ModeratorsAuthenticate(existingModerator, adminAuthDTO.Password);
+                    return Ok(new { moderator });
+                }
+                else if (existingModerator == null && existingAdmin != null)
+                {
+                    Admin admin = administrationAuthService.AdminAuthenticate(existingAdmin, adminAuthDTO.Password);
+                    return Ok(new { admin });
+                }
+                else
+                {
+                    return StatusCode(500, new ResponseDTO()
+                    {
+                        Message = "Сообщите о проблеме администратору, данных пользователей было найдено двое.",
+                        Status = false
+                    });
+                }
             }
             catch (ObjectNotFoundException ex)
             {
                 logger.LogError(ex.Message);
-                return StatusCode(404, new ResponseDTO() { Message = "Данный пользователь не найден", Status = false });
+                return NotFound(new ResponseDTO() { Message = "Данный пользователь не найден", Status = false });
             }
             catch (Exception ex)
             {
@@ -78,39 +97,34 @@ namespace AuthJWT.Controllers.Auth
             }
         }
 
-
-
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> ModeratorAuthenticate([FromBody]AdministartionAuthDTO adminAuthDTO)
+        [HttpGet]
+        [Authorize(Roles = Role.Admin)]
+        [Authorize(Roles = Role.Moderator)]
+        public async Task<IActionResult> GetAdministartionData()
         {
-            try
-            {
-                if (!ModelState.IsValid)
+            try { 
+                string userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                string role = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role).Value;
+
+                if (role == Role.Admin)
                 {
-                    return BadRequest();
+                    Admin existingAdmin = await adminCrudService.CheckAdminExist(userId);
+                    return Ok(new { existingAdmin });
                 }
-
-                Moderator existingModerator = await moderatorsCrudService.CheckModeratorExist(adminAuthDTO.Login);
-
-                if (existingModerator == null)
+                else if (role == Role.Moderator)
                 {
-                    return NotFound(new ResponseDTO() { Message = "Данный пользователь не найден", Status = false });
+                    Moderator existingModerator = await moderatorsCrudService.CheckModeratorExist(userId);
+                    return Ok(new { existingModerator  });
                 }
-
-                Moderator moderator = administrationAuthService.ModeratorsAuthenticate(existingModerator, adminAuthDTO.Password);
-
-                if (moderator == null)
+                else
                 {
                     return NotFound(new ResponseDTO() { Message = "Данный пользователь не найден", Status = false });
                 }
-
-                return Ok(new { moderator });
             }
-            catch (ObjectNotFoundException ex)
+             catch (ObjectNotFoundException ex)
             {
                 logger.LogError(ex.Message);
-                return StatusCode(404, new ResponseDTO() { Message = "Данный пользователь не найден", Status = false });
+                return NotFound(new ResponseDTO() { Message = "Данный пользователь не найден", Status = false });
             }
             catch (Exception ex)
             {

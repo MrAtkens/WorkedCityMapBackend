@@ -60,6 +60,7 @@ namespace AuthJWT.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
+                    new Claim(ClaimTypes.NameIdentifier, existingModerator.Id.ToString()),
                     new Claim(ClaimTypes.Name, existingModerator.Login),
                     new Claim(ClaimTypes.Role, existingModerator.Role)
                 }),

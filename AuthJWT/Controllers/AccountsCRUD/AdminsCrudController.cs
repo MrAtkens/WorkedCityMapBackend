@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Services.Services.AdministartionAccountsService;
 using Services.Services.ModeratersAccountsService;
 
 namespace AuthJWT.Controllers.ModeratersCRUD
@@ -24,10 +25,12 @@ namespace AuthJWT.Controllers.ModeratersCRUD
     {
         private readonly ILogger<AdminsCrudController> logger;
         private readonly AdminsCrudService adminsCrudService;
-        public AdminsCrudController(AdminsCrudService adminsCrudService, ILogger<AdminsCrudController> logger)
+        private readonly ModeratorsCrudService moderatorsCrudService;
+        public AdminsCrudController(AdminsCrudService adminsCrudService, ModeratorsCrudService moderatorsCrudService, ILogger<AdminsCrudController> logger)
         {
             this.logger = logger;
             this.adminsCrudService = adminsCrudService;
+            this.moderatorsCrudService = moderatorsCrudService;
         }
 
         [HttpGet]
@@ -88,6 +91,13 @@ namespace AuthJWT.Controllers.ModeratersCRUD
                 }
 
                 ResponseDTO check = await adminsCrudService.CheckAdminExistForAdd(addAdminDTO.Login);
+
+                if (check.Status == false)
+                {
+                    return StatusCode(400, check);
+                }
+
+                check = await moderatorsCrudService.CheckModeratorExistForAdd(addAdminDTO.Login);
 
                 if (check.Status == false)
                 {
