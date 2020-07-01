@@ -60,9 +60,9 @@ namespace AuthJWT.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, existingModerator.Id.ToString()),
                     new Claim(ClaimTypes.Name, existingModerator.Login),
-                    new Claim(ClaimTypes.Role, existingModerator.Role)
+                    new Claim(ClaimTypes.Role, existingModerator.Role),
+                    new Claim(ClaimTypes.Surname, existingModerator.LastName)
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

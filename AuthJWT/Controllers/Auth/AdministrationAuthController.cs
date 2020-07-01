@@ -98,12 +98,11 @@ namespace AuthJWT.Controllers.Auth
         }
 
         [HttpGet]
-        [Authorize(Roles = Role.Admin)]
-        [Authorize(Roles = Role.Moderator)]
+        [Authorize(Roles = "Admin, Moderator, SuperAdmin")]
         public async Task<IActionResult> GetAdministartionData()
         {
             try { 
-                string userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                string userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
                 string role = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role).Value;
 
                 if (role == Role.Admin)

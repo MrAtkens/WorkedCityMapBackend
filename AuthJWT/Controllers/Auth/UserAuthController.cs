@@ -4,16 +4,18 @@ using System.Threading.Tasks;
 using AuthJWT.DTOs;
 using AuthJWT.Helpers;
 using AuthJWT.Models;
+using AuthJWT.Options;
 using AuthJWT.Services;
 using DTOs.DTOs;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Twilio.Rest.Trunking.V1;
 
 namespace AuthJWT.Controllers
 {
     [Route("api/[controller]/[action]")]
+    [EnableCors(CorsOrigins.FrontPolicy)]
     [ApiController]
     public class UserAuthController : ControllerBase
     {
