@@ -53,7 +53,7 @@ namespace AuthJWT
             {
                 o.AddPolicy(CorsOrigins.FrontPolicy, builder =>
                 {
-                    builder.WithOrigins("http://localhost:3000")
+                    builder.WithOrigins("http://localhost:3000", "http://localhost:4343")
                                        .AllowAnyHeader()
                                        .WithMethods("GET")
                                        .WithMethods("POST")

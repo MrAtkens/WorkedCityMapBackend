@@ -30,7 +30,7 @@ namespace AuthJWT.DataAcces
                Role = Role.SuperAdmin,
                AddedModerators = 0,
                AddedTeams = 0,
-               AdminAddedDate = DateTime.Now
+               CreationDate = DateTime.Now
              });
         }
     }

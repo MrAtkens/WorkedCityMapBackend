@@ -63,7 +63,7 @@ namespace Services.Services.AdministartionAccountsService
                 context.Entry(admin).CurrentValues.SetValues(newAdmin);
                 await context.SaveChangesAsync();
             }
-            return new ResponseDTO() { Message = $"Вы успешно добавили {moderator.LastName} {moderator.FirstName} в роли модератора", Status = true };
+            return new ResponseDTO() { Message = $"Вы успешно добавили {moderator.LastName} {moderator.FirstName} в роли модератора", Status = true, ResponseData = moderator };
         }
 
         public async Task<ResponseDTO> EditModerator(Moderator foundedModerator, EditModeratorDTO editModeratorDTO)
@@ -72,7 +72,11 @@ namespace Services.Services.AdministartionAccountsService
             {
                 string password = BCrypt.Net.BCrypt.HashPassword(editModeratorDTO.Password);
                 editModeratorDTO.Password = password;
-            } 
+            }
+            else
+            {
+                editModeratorDTO.Password = foundedModerator.Password;
+            }
             context.Entry(foundedModerator).CurrentValues.SetValues(editModeratorDTO);
             int count = await context.SaveChangesAsync();
             if (count > 0)

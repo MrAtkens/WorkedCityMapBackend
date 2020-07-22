@@ -8,7 +8,8 @@
     ".NETCoreApp,Version=v3.1": {
       "DTOs/1.0.0": {
         "dependencies": {
-          "Microsoft.AspNetCore.Http.Features": "3.1.4"
+          "Microsoft.AspNetCore.Http.Features": "3.1.4",
+          "Models": "1.0.0"
         },
         "runtime": {
           "DTOs.dll": {}
@@ -41,6 +42,11 @@
             "fileVersion": "4.700.20.12001"
           }
         }
+      },
+      "Models/1.0.0": {
+        "runtime": {
+          "Models.dll": {}
+        }
       }
     }
   },
@@ -70,6 +76,11 @@
       "sha512": "sha512-TyMTasnXQt7U4k13RQ7tA3CrfWEkvWjR635SFfnKVwwMOgClLE5mdHSkG2D13BLIdNwbPTGVQnhQB8Rk7f53Rg==",
       "path": "system.io.pipelines/4.7.1",
       "hashPath": "system.io.pipelines.4.7.1.nupkg.sha512"
+    },
+    "Models/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

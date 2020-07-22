@@ -32,6 +32,16 @@
         "runtime": {
           "lib/netcoreapp3.0/System.IO.Pipelines.dll": {}
         }
+      },
+      "Models/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v3.1",
+        "compile": {
+          "bin/placeholder/Models.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Models.dll": {}
+        }
       }
     }
   },
@@ -92,11 +102,17 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "Models/1.0.0": {
+      "type": "project",
+      "path": "../Models/Models.csproj",
+      "msbuildProject": "../Models/Models.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "Microsoft.AspNetCore.Http.Features >= 3.1.4"
+      "Microsoft.AspNetCore.Http.Features >= 3.1.4",
+      "Models >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -124,7 +140,11 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "projectReferences": {}
+          "projectReferences": {
+            "G:\\WEB\\WorkedCityMapBackend\\Models\\Models.csproj": {
+              "projectPath": "G:\\WEB\\WorkedCityMapBackend\\Models\\Models.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

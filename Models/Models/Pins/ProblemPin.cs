@@ -7,7 +7,7 @@ namespace AuthJWT.Models
     [Table("ProblemPins")]
     public class ProblemPin : DefaultPin
     {
-        public string PinSvgUrl { get; } = FileServerPath + "problemPin.svg"; // pin color on map 
+        public string PinSvgUrl { get; } = "http://localhost:54968/PinPublicImages/problemPin.svg"; // pin color on map 
         public ICollection<ProblemImages> Images { get; set; } // pin Images
         public string ProblemDescription { get; set; }
     }

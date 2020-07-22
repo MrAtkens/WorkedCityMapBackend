@@ -12,7 +12,6 @@ namespace DTOs.DTOs.AuthModerations
         [MinLength(2)]
         public string LastName { get; set; }
 
-        [Required]
         [MaxLength(16)]
         [MinLength(8)]
         public string Password { get; set; }

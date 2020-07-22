@@ -7,3 +7,6 @@ G:\WEB\WorkedCityMapBackend\DTOs\bin\Debug\netcoreapp3.1\DTOs.pdb
 G:\WEB\WorkedCityMapBackend\DTOs\obj\Debug\netcoreapp3.1\DTOs.csproj.CoreCompileInputs.cache
 G:\WEB\WorkedCityMapBackend\DTOs\obj\Debug\netcoreapp3.1\DTOs.dll
 G:\WEB\WorkedCityMapBackend\DTOs\obj\Debug\netcoreapp3.1\DTOs.pdb
+G:\WEB\WorkedCityMapBackend\DTOs\bin\Debug\netcoreapp3.1\Models.dll
+G:\WEB\WorkedCityMapBackend\DTOs\bin\Debug\netcoreapp3.1\Models.pdb
+G:\WEB\WorkedCityMapBackend\DTOs\obj\Debug\netcoreapp3.1\DTOs.csproj.CopyComplete

@@ -634,7 +634,8 @@
       },
       "DTOs/1.0.0": {
         "dependencies": {
-          "Microsoft.AspNetCore.Http.Features": "3.1.4"
+          "Microsoft.AspNetCore.Http.Features": "3.1.4",
+          "Models": "1.0.0"
         },
         "runtime": {
           "DTOs.dll": {}

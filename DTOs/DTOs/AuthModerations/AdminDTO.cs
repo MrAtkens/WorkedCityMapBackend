@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace DTOs.DTOs.AuthModerations
 {
@@ -9,7 +6,7 @@ namespace DTOs.DTOs.AuthModerations
     {
         [Required]
         [MaxLength(16)]
-        [MinLength(3)]
+        [MinLength(4)]
         public string Login { get; set; }
 
         [Required]

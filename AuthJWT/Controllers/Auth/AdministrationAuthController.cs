@@ -5,6 +5,7 @@ using System.Data.Entity.Core.Metadata.Edm;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AuthJWT.Helpers;
 using AuthJWT.Models;
 using AuthJWT.Models.AuthModels;
 using AuthJWT.Options;
@@ -60,21 +61,29 @@ namespace AuthJWT.Controllers.Auth
 
                 if (existingModerator == null && existingAdmin == null)
                 {
-                    return NotFound(new ResponseDTO() { Message = "Данный пользователь не найден", Status = false });
+                    return NotFound(new ResponseDTO() { Message = "Данный пользователь не найден или даннные авторизаций не верны", Status = false });
                 }
                 else if (existingModerator !=null && existingAdmin == null)
                 {
                     Moderator moderator = administrationAuthService.ModeratorsAuthenticate(existingModerator, adminAuthDTO.Password);
+                    if(moderator == null)
+                    {
+                        return NotFound(new ResponseDTO() { Message = "Данный пользователь не найден или даннные авторизаций не верны", Status = false });
+                    }
                     return Ok(new { moderator });
                 }
                 else if (existingModerator == null && existingAdmin != null)
                 {
                     Admin admin = administrationAuthService.AdminAuthenticate(existingAdmin, adminAuthDTO.Password);
+                    if (admin == null)
+                    {
+                        return NotFound(new ResponseDTO() { Message = "Данный пользователь не найден или даннные авторизаций не верны", Status = false });
+                    }
                     return Ok(new { admin });
                 }
                 else
                 {
-                    return StatusCode(500, new ResponseDTO()
+                    return NotFound(new ResponseDTO()
                     {
                         Message = "Сообщите о проблеме администратору, данных пользователей было найдено двое.",
                         Status = false
@@ -91,7 +100,6 @@ namespace AuthJWT.Controllers.Auth
                 logger.LogError(ex.Message);
                 return StatusCode(500, new ResponseDTO()
                 {
-                    Message = "На данный момент на стороне сервера ошибка, пожалуйста повторите попытку позже",
                     Status = false
                 });
             }
@@ -105,14 +113,24 @@ namespace AuthJWT.Controllers.Auth
                 string userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
                 string role = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role).Value;
 
-                if (role == Role.Admin)
+                if (role == Role.Admin || role == Role.SuperAdmin)
                 {
                     Admin existingAdmin = await adminCrudService.CheckAdminExist(userId);
+                    if (existingAdmin == null)
+                    {
+                        return Unauthorized(new ResponseDTO() { Message = "Данный вашего токена верефикаций не верны или устарели, пожалуйста авторизуйтесь заново", Status = false });
+                    }
+                    existingAdmin.AdminWithoutPassword();
                     return Ok(new { existingAdmin });
                 }
                 else if (role == Role.Moderator)
                 {
                     Moderator existingModerator = await moderatorsCrudService.CheckModeratorExist(userId);
+                    if (existingModerator == null)
+                    {
+                        return Unauthorized(new ResponseDTO() { Message = "Данный вашего токена верефикаций не верны или устарели, пожалуйста авторизуйтесь заново", Status = false });
+                    }
+                    existingModerator.ModeratorWithoutPassword();
                     return Ok(new { existingModerator  });
                 }
                 else
@@ -130,7 +148,6 @@ namespace AuthJWT.Controllers.Auth
                 logger.LogError(ex.Message);
                 return StatusCode(500, new ResponseDTO()
                 {
-                    Message = "На данный момент на стороне сервера ошибка, пожалуйста повторите попытку позже",
                     Status = false
                 });
             }

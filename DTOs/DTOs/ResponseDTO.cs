@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using Models.Models.Interfaces;
 
 namespace DTOs.DTOs
 {
@@ -6,5 +6,6 @@ namespace DTOs.DTOs
     {
         public string Message { get; set; }
         public bool Status { get; set; }
+        public virtual IResponse  ResponseData { get; set; }
     }
 }

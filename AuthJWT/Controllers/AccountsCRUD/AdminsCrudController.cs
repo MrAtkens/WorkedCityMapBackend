@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AuthJWT.Models;
 using AuthJWT.Models.AuthModels;
 using AuthJWT.Options;
-using AuthJWT.Services;
 using DTOs.DTOs;
 using DTOs.DTOs.AuthModerations;
 using Microsoft.AspNetCore.Authorization;
@@ -46,7 +45,6 @@ namespace AuthJWT.Controllers.ModeratersCRUD
                 logger.LogError(ex.Message);
                 return StatusCode(500, new ResponseDTO()
                 {
-                    Message = "На данный момент на стороне сервера ошибка, пожалуйста повторите попытку позже",
                     Status = false
                 });
             }
@@ -74,7 +72,6 @@ namespace AuthJWT.Controllers.ModeratersCRUD
                 logger.LogError(ex.Message);
                 return StatusCode(500, new ResponseDTO()
                 {
-                    Message = "На данный момент на стороне сервера ошибка, пожалуйста повторите попытку позже",
                     Status = false
                 });
             }
@@ -118,7 +115,6 @@ namespace AuthJWT.Controllers.ModeratersCRUD
                 logger.LogError(ex.Message);
                 return StatusCode(500, new ResponseDTO()
                 {
-                    Message = "На данный момент на стороне сервера ошибка, пожалуйста повторите попытку позже",
                     Status = false
                 });
             }
@@ -155,7 +151,6 @@ namespace AuthJWT.Controllers.ModeratersCRUD
                 logger.LogError(ex.Message);
                 return StatusCode(500, new ResponseDTO()
                 {
-                    Message = "На данный момент на стороне сервера ошибка, пожалуйста повторите попытку позже",
                     Status = false
                 });
             }
@@ -192,7 +187,6 @@ namespace AuthJWT.Controllers.ModeratersCRUD
                 logger.LogError(ex.Message);
                 return StatusCode(500, new ResponseDTO()
                 {
-                    Message = "На данный момент на стороне сервера ошибка, пожалуйста повторите попытку позже",
                     Status = false
                 });
             }

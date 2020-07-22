@@ -193,7 +193,11 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
-            "projectReferences": {}
+            "projectReferences": {
+              "G:\\WEB\\WorkedCityMapBackend\\Models\\Models.csproj": {
+                "projectPath": "G:\\WEB\\WorkedCityMapBackend\\Models\\Models.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

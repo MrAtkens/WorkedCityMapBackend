@@ -6,6 +6,5 @@ namespace AuthJWT.Models.AuthModels
     {
         public int AddedModerators { get; set; }
         public int AddedTeams { get; set; }
-        public DateTime AdminAddedDate { get; set; } = DateTime.Now;
     }
 }

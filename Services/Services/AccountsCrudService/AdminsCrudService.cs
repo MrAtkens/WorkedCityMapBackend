@@ -56,7 +56,7 @@ namespace Services.Services.ModeratersAccountsService
             };
             context.Admins.Add(admin);
             await context.SaveChangesAsync();
-            return new ResponseDTO() { Message = $"Вы успешно добавили {admin.LastName} {admin.FirstName} в роли админа", Status = true };
+            return new ResponseDTO() { Message = $"Вы успешно добавили {admin.LastName} {admin.FirstName} в роли админа", Status = true, ResponseData = admin };
         }
 
 

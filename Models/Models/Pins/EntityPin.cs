@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Models.Models.Interfaces;
+using System;
 
 namespace AuthJWT.Models
 {
-    public class EntityPin
+    public class EntityPin : IEntityPin
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public Guid ModeratorId { get; set; }
         public Guid UserKeyId { get; set; }
         public DateTime CreationDate { get; set; } = DateTime.Now;
-        public DateTime? DeletedDate { get; set; }  
-
-        protected static string FileServerPath = "http://localhost:54968/PinPublicImages/";
+        public DateTime? DeletedDate { get; set; }
+        public string FileServerPath(string url) {
+            return url;
+        }
 
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity.Core;
 using System.Threading.Tasks;
+using AuthJWT.Helpers;
 using AuthJWT.Models;
 using AuthJWT.Models.AuthModels;
 using AuthJWT.Options;
@@ -48,7 +49,6 @@ namespace AuthJWT.Controllers.ModeratersCRUD
                 logger.LogError(ex.Message);
                 return StatusCode(500, new ResponseDTO()
                 {
-                    Message = "На данный момент на стороне сервера ошибка, пожалуйста повторите попытку позже",
                     Status = false
                 });
             }
@@ -92,14 +92,14 @@ namespace AuthJWT.Controllers.ModeratersCRUD
 
                 if (check.Status == false)
                 {
-                    return StatusCode(400, check);
+                    return Conflict(check);
                 }
 
                 check = await adminsCrudService.CheckAdminExistForAdd(addModeratorDTO.Login);
 
                 if (check.Status == false)
                 {
-                    return StatusCode(400, check);
+                    return Conflict(check);
                 }
 
                 Admin admin = await adminsCrudService.CheckAdminExist(addModeratorDTO.AdminId);
@@ -107,21 +107,22 @@ namespace AuthJWT.Controllers.ModeratersCRUD
                 ResponseDTO answer = await moderatorsCrudService.AddModerator(admin, addModeratorDTO);
                 logger.LogInformation($"Модератор: {addModeratorDTO.Login}, был добавлен Админом {admin.Login}");
 
-                return Ok(new { answer });
+                Moderator moderator = await moderatorsCrudService.CheckModeratorExist(answer.ResponseData.Id);
+                moderator = moderator.ModeratorWithoutPassword();
+                return Ok(new { answer, moderator });
             }
             catch (Exception ex)
             {
                 logger.LogError(ex.Message);
                 return StatusCode(500, new ResponseDTO()
                 {
-                    Message = "На данный момент на стороне сервера ошибка, пожалуйста повторите попытку позже",
                     Status = false
                 });
             }
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> EditModerator(Guid Id, [FromForm] EditModeratorDTO moderatorEditDTO)
+        public async Task<IActionResult> EditModerator(Guid Id, [FromBody] EditModeratorDTO moderatorEditDTO)
         {
             try
             {
@@ -151,14 +152,13 @@ namespace AuthJWT.Controllers.ModeratersCRUD
                 logger.LogError(ex.Message);
                 return StatusCode(500, new ResponseDTO()
                 {
-                    Message = "На данный момент на стороне сервера ошибка, пожалуйста повторите попытку позже",
                     Status = false
                 });
             }
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteModerator(Guid Id, AdminInfoDTO adminInfo)
+        public async Task<IActionResult> DeleteModerator(Guid Id)
         {
             try
             {
@@ -175,7 +175,7 @@ namespace AuthJWT.Controllers.ModeratersCRUD
                 }
 
                 ResponseDTO check = await moderatorsCrudService.DeleteModerator(foundedModerator);
-                logger.LogInformation($"Данные модератора: {foundedModerator.Login}, были удалены {adminInfo.Login}: {adminInfo.Id}");
+                logger.LogInformation($"Данные модератора: {foundedModerator.Login}, были удалены");
                 return Ok(new { check });
             }
             catch (ObjectNotFoundException ex)
@@ -188,7 +188,6 @@ namespace AuthJWT.Controllers.ModeratersCRUD
                 logger.LogError(ex.Message);
                 return StatusCode(500, new ResponseDTO()
                 {
-                    Message = "На данный момент на стороне сервера ошибка, пожалуйста повторите попытку позже",
                     Status = false
                 });
             }
